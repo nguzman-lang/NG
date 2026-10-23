@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cargando NG SUEÑA Y GANA...</title>
+  <style>
+    body {
+      background-color: #030712;
+      color: #ffffff;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    .spinner {
+      border: 4px solid rgba(234, 179, 8, 0.2);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border-left-color: #eab308;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .btn {
+      margin-top: 25px;
+      background: #eab308;
+      color: #000000;
+      font-weight: 800;
+      padding: 14px 28px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-size: 15px;
+      display: inline-block;
+      box-shadow: 0 4px 15px rgba(234, 179, 8, 0.3);
+    }
+    p {
+      color: #9ca3af;
+      font-size: 14px;
+      max-width: 350px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="spinner"></div>
+  <h2 style="color: #facc15; margin: 0 0 10px 0;">NG SUEÑA Y GANA</h2>
+  <p>Abriendo plataforma de boletos en Safari...</p>
+
+  <a id="btnContinuar" href="https://script.google.com/macros/s/AKfycby3y4OhHqMt-MDHdW3gZXSw_CNbbO7skgeEbMvIWzLvrUM7IITWwZScmkzh2IsMKY1h/exec" class="btn">TOCA AQUÍ PARA ENTRAR</a>
+
+  <script>
+    const DESTINO_URL = "https://script.google.com/macros/s/AKfycby3y4OhHqMt-MDHdW3gZXSw_CNbbO7skgeEbMvIWzLvrUM7IITWwZScmkzh2IsMKY1h/exec";
+    
+    // Redirigir de inmediato
+    window.location.href = DESTINO_URL;
+  </script>
+</body>
+</html>
