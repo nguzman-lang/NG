@@ -199,7 +199,7 @@
           </div>
           <div class="flex justify-between text-sm font-bold text-white pt-1 border-t border-gray-800">
             <span>Total a Transferir:</span>
-            <span id="resumenTotal" class="text-yellow-400 font-black text-lg">$100.00</span>
+            <span id="resumenTotal" class="text-yellow-400 font-black text-lg">$0.00</span>
           </div>
         </div>
 
@@ -486,12 +486,12 @@
       }
 
       document.querySelectorAll('.btn-opcion').forEach(btn => {
-        btn.classList.remove('ring-2', 'ring-yellow-400', 'border-yellow-400', 'bg-yellow-500/10');
+        btn.classList.remove('ring-2', 'ring-yellow-400', 'border-yellow-400', 'bg-yellow-500/20');
       });
 
-      const selectedBtn = document.querySelector(`[data-cant="${cantidad}"]`);
+      const selectedBtn = document.getElementById('pack_btn_' + cantidad);
       if (selectedBtn) {
-        selectedBtn.classList.add('ring-2', 'ring-yellow-400', 'border-yellow-400', 'bg-yellow-500/10');
+        selectedBtn.classList.add('ring-2', 'ring-yellow-400', 'border-yellow-400', 'bg-yellow-500/20');
       }
 
       actualizarCalculos();
@@ -502,18 +502,18 @@
       let val = parseInt(input.value, 10);
 
       document.querySelectorAll('.btn-opcion').forEach(btn => {
-        btn.classList.remove('ring-2', 'ring-yellow-400', 'border-yellow-400', 'bg-yellow-500/10');
+        btn.classList.remove('ring-2', 'ring-yellow-400', 'border-yellow-400', 'bg-yellow-500/20');
       });
 
-      if (!isNaN(val) && val > 0) {
+      if (!isNaN(val) && val >= minimoCompraGlobal) {
         cantidadSeleccionada = val;
       } else {
         cantidadSeleccionada = minimoCompraGlobal;
       }
 
-      const fastBtn = document.querySelector(`[data-cant="${cantidadSeleccionada}"]`);
+      const fastBtn = document.getElementById('pack_btn_' + cantidadSeleccionada);
       if (fastBtn) {
-        fastBtn.classList.add('ring-2', 'ring-yellow-400', 'border-yellow-400', 'bg-yellow-500/10');
+        fastBtn.classList.add('ring-2', 'ring-yellow-400', 'border-yellow-400', 'bg-yellow-500/20');
       }
 
       actualizarCalculos();
@@ -527,8 +527,14 @@
     }
 
     function actualizarCalculos() {
-      const cant = parseInt(cantidadSeleccionada, 10) || minimoCompraGlobal || 1;
-      let subtotal = cant * PRECIO_BASE;
+      let cant = parseInt(cantidadSeleccionada, 10);
+      if (isNaN(cant) || cant < minimoCompraGlobal) {
+        cant = minimoCompraGlobal;
+        cantidadSeleccionada = cant;
+      }
+
+      let precioUnitario = Number(PRECIO_BASE) || 100;
+      let subtotal = cant * precioUnitario;
       let descPct = calcularDescuentoPorcentaje(cant);
       totalCalculado = subtotal * (1 - descPct);
 
@@ -536,7 +542,7 @@
       if (resumenDesc) resumenDesc.innerText = Math.round(descPct * 100) + '%';
       
       const resumenTotal = document.getElementById('resumenTotal');
-      if (resumenTotal) resumenTotal.innerText = '$' + totalCalculado.toFixed(2);
+      if (resumenTotal) resumenTotal.innerText = '$' + totalCalculado.toLocaleString('es-DO', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
     function buscarBoleto() {
@@ -587,11 +593,7 @@
     function abrirModalCompra() {
       document.getElementById('modalCompra').classList.remove('hidden');
       document.getElementById('modalCompra').classList.add('flex');
-      if (!cantidadSeleccionada || cantidadSeleccionada < minimoCompraGlobal) {
-        seleccionarOpcion(minimoCompraGlobal);
-      } else {
-        seleccionarOpcion(cantidadSeleccionada);
-      }
+      seleccionarOpcion(minimoCompraGlobal);
     }
 
     function cerrarModalCompra() {
@@ -607,32 +609,36 @@
       const email = document.getElementById('email').value.trim();
       const fileInput = document.getElementById('voucherFile');
 
-      const boletasAComprar = parseInt(cantidadSeleccionada, 10);
+      let boletasAComprar = parseInt(cantidadSeleccionada, 10);
+      const inputLibreVal = parseInt(document.getElementById('cantLibre').value, 10);
+      if (!isNaN(inputLibreVal) && inputLibreVal > 0) {
+        boletasAComprar = inputLibreVal;
+      }
 
       if (!nombre || !telefono || !email) {
-        alert("Por favor completa todos tus datos personales.");
+        alert("Por favor completa tu nombre, teléfono y correo electrónico.");
         return;
       }
 
       if (!bancoSeleccionado) {
-        alert("Debes seleccionar obligatoriamente un banco.");
+        alert("Debes seleccionar el banco al que realizaste la transferencia.");
         document.getElementById('msgBancoReq').classList.remove('hidden');
         return;
       }
 
-      if (isNaN(boletasAComprar) || boletasAComprar < minimoCompraGlobal) {
-        alert("La cantidad mínima requerida es de " + minimoCompraGlobal + " boleta(s).");
+      if (boletasAComprar < minimoCompraGlobal) {
+        alert("La cantidad mínima requerida para este sorteo es de " + minimoCompraGlobal + " boletas.");
         return;
       }
 
       if (fileInput.files.length === 0) {
-        alert("Por favor adjunta el comprobante de pago.");
+        alert("Por favor adjunta la foto o captura del comprobante de pago.");
         return;
       }
 
       const btn = document.getElementById('btnSubmit');
       btn.disabled = true;
-      btn.innerHTML = `<span class="animate-pulse">ASIGNANDO ${boletasAComprar} BOLETAS Y SUBIENDO VOUCHER...</span>`;
+      btn.innerHTML = `<span class="animate-pulse">PROCESANDO ${boletasAComprar} BOLETAS Y SUBIENDO COMPROBANTE...</span>`;
 
       const file = fileInput.files[0];
       const reader = new FileReader();
@@ -652,6 +658,7 @@
 
         fetch(SCRIPT_URL, {
           method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(payload)
         })
         .then(res => res.json())
@@ -659,25 +666,26 @@
           if (data && data.exito) {
             finalizarCompraExitosa(data.numeros || []);
           } else {
-            throw new Error(data.mensaje || "Error al procesar los datos");
+            throw new Error((data && data.mensaje) ? data.mensaje : "Error en el servidor");
           }
         })
         .catch(err => {
           setTimeout(() => {
             apiCallJSONP('verificarBoleto', { q: telefono, hoja: sorteoActivo })
               .then(resVerif => {
-                let nums = [];
                 if (resVerif && resVerif.resultados && resVerif.resultados.length > 0) {
-                  nums = resVerif.resultados.map(r => r.numero).slice(-boletasAComprar);
+                  const misNums = resVerif.resultados.map(r => r.numero).slice(-boletasAComprar);
+                  finalizarCompraExitosa(misNums);
+                } else {
+                  throw new Error("No se pudo verificar la compra.");
                 }
-                finalizarCompraExitosa(nums);
               })
               .catch(() => {
                 btn.disabled = false;
                 btn.innerHTML = `<span>PROCESAR COMPRA</span>`;
-                alert("Hubo un inconveniente al registrar la compra: " + err.message);
+                alert("Ocurrió un inconveniente: " + err.message);
               });
-          }, 3500);
+          }, 4000);
         });
       };
 
