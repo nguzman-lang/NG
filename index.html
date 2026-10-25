@@ -239,7 +239,7 @@
 
   <!-- SCRIPT CONECTOR CLIENTE -->
   <script>
-    // URL activa de tu Web App desplegada en Google Apps Script
+    // URL activa de tu Web App en Google Apps Script
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyKzgwK_OY--TrQp4R-SbkNfw8FklCZVfsEIeUvaLV5lrLwbczBedsSnpKVlmr3sF6l1Q/exec";
 
     const BANCOS_INFO = {
@@ -291,7 +291,7 @@
 
         script.onerror = function() {
           cleanup();
-          reject(new Error("No se pudo conectar con el servidor de Google Sheets. Verifica permisos en Apps Script."));
+          reject(new Error("No se pudo conectar con el servidor de Google Sheets."));
         };
 
         document.body.appendChild(script);
@@ -341,10 +341,7 @@
           document.getElementById('contenedorTabs').innerHTML = `
             <div class="bg-red-500/10 border border-red-500/40 text-red-400 text-xs p-4 rounded-2xl text-center w-full space-y-2">
               <p class="font-extrabold text-sm">⚠️ Conexión no disponible con Google Apps Script</p>
-              <p class="text-[11px] text-gray-300">En <b>script.google.com</b> ve a <i>Implementar > Gestionar implementaciones</i>, edita y verifica que <b>Quién tiene acceso</b> sea <b>Cualquiera (Anyone)</b> con una <b>Nueva versión</b>.</p>
-              <a href="${SCRIPT_URL}?action=getListaSorteos" target="_blank" class="inline-block bg-yellow-500 text-black font-black text-[11px] px-3 py-1.5 rounded-lg hover:bg-yellow-400 transition mt-1">
-                Probar URL del Script directamente ↗
-              </a>
+              <p class="text-[11px] text-gray-300">Verifica que en <i>Gestionar implementaciones</i> el acceso sea <b>Cualquiera (Anyone)</b> con una <b>Nueva versión</b>.</p>
             </div>
           `;
         });
@@ -388,7 +385,6 @@
           document.getElementById('lblMinimo').innerText = minimoCompraGlobal;
 
           generarPaquetesDinamicos(minimoCompraGlobal);
-          // Forzar la selección inmediata al mínimo cargado de H10
           seleccionarOpcion(minimoCompraGlobal);
         })
         .catch(err => console.error("Error al cargar sorteo:", err));
@@ -418,7 +414,7 @@
         }
       });
 
-      opcionesUnicas.forEach((o, index) => {
+      opcionesUnicas.forEach((o) => {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.onclick = function() { seleccionarOpcion(o.cant); };
@@ -478,7 +474,7 @@
         btn.innerHTML = `<span>✓ ¡Copiado!</span>`;
         btn.className = "bg-green-500 text-black font-black px-3 py-1 rounded-lg transition text-[11px] flex items-center gap-1 shadow-md cursor-pointer";
       }).catch(() => {
-        alert("Número de cuenta: " + numCuenta);
+        window.prompt("Copia el número de cuenta:", numCuenta);
       });
     }
 
@@ -596,7 +592,6 @@
     function abrirModalCompra() {
       document.getElementById('modalCompra').classList.remove('hidden');
       document.getElementById('modalCompra').classList.add('flex');
-      // Asegurarse de que el mínimo de H10 esté seleccionado y calculado
       if (!cantidadSeleccionada || cantidadSeleccionada < minimoCompraGlobal) {
         seleccionarOpcion(minimoCompraGlobal);
       } else {
@@ -617,7 +612,6 @@
       const email = document.getElementById('email').value.trim();
       const fileInput = document.getElementById('voucherFile');
 
-      // Leer directamente la cantidad del input o variable validada
       const inputCantidad = parseInt(document.getElementById('cantLibre').value, 10);
       const boletasAComprar = (!isNaN(inputCantidad) && inputCantidad > 0) ? inputCantidad : cantidadSeleccionada;
 
@@ -656,12 +650,13 @@
           telefono: telefono,
           email: email,
           banco: bancoSeleccionado,
-          cantidad: boletasAComprar, // Cantidad exacta seleccionada
+          cantidad: boletasAComprar,
           totalCalculado: totalCalculado,
           fileName: file.name,
           fileData: evt.target.result
         };
 
+        // Realizamos la llamada POST
         fetch(SCRIPT_URL, {
           method: 'POST',
           mode: 'no-cors',
@@ -669,7 +664,7 @@
           body: JSON.stringify(payload)
         })
         .then(() => {
-          // Consultar las boletas asignadas a este comprador tomando exactamente la cantidad comprada
+          // Consultar inmediatamente las boletas asignadas a este comprador tomando exactamente la cantidad comprada
           setTimeout(() => {
             apiCallJSONP('verificarBoleto', { q: telefono, hoja: sorteoActivo })
               .then(resVerif => {
@@ -748,7 +743,7 @@
         btn.innerHTML = `<span>✓ ¡LISTA DE BOLETAS COPIADA!</span>`;
         btn.className = "w-full bg-green-500 text-black py-3 rounded-xl font-black transition flex items-center justify-center gap-2 text-sm shadow-md uppercase cursor-pointer";
       }).catch(() => {
-        alert("Toma una captura de pantalla de tus números asignados.");
+        window.prompt("Copia tus boletos:", texto);
       });
     }
 
