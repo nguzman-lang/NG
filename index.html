@@ -102,72 +102,6 @@
       </div>
     </div>
 
-    <!-- VISOR / SIMULADOR DE GOOGLE SHEETS EN VIVO -->
-    <div class="bg-gray-900 border border-emerald-500/30 rounded-3xl p-6 shadow-2xl space-y-4">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-gray-800 pb-4">
-        <div>
-          <h3 class="text-base md:text-lg font-black text-emerald-400 flex items-center gap-2">
-            <span>📊</span>
-            <span>GOOGLE SHEETS: BASE DE DATOS EN VIVO</span>
-          </h3>
-          <p class="text-xs text-gray-400">Inspecciona y administra las filas tal cual se registran en tu hoja de cálculo.</p>
-        </div>
-
-        <div class="flex items-center gap-2">
-          <button onclick="reiniciarHojaCalculo()" class="text-xs bg-red-950/60 hover:bg-red-900 border border-red-500/40 text-red-300 font-bold px-3 py-1.5 rounded-xl transition">
-            🔄 Resetear Hoja
-          </button>
-        </div>
-      </div>
-
-      <!-- Selector de pestaña del Sheets -->
-      <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-        <span class="text-gray-400 font-bold uppercase text-[11px]">Hojas:</span>
-        <div id="tabsSpreadsheet" class="flex gap-2"></div>
-      </div>
-
-      <!-- Estadísticas rápidas de la hoja -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
-        <div class="bg-gray-950 border border-gray-800 p-2.5 rounded-xl">
-          <span class="text-gray-500 block text-[10px] uppercase font-bold">Total Boletas</span>
-          <span id="statTotal" class="text-white font-extrabold text-sm">100</span>
-        </div>
-        <div class="bg-gray-950 border border-gray-800 p-2.5 rounded-xl">
-          <span class="text-gray-500 block text-[10px] uppercase font-bold">Vendidas/Pendientes</span>
-          <span id="statVendidas" class="text-amber-400 font-extrabold text-sm">0</span>
-        </div>
-        <div class="bg-gray-950 border border-gray-800 p-2.5 rounded-xl">
-          <span class="text-gray-500 block text-[10px] uppercase font-bold">Disponibles</span>
-          <span id="statDisponibles" class="text-emerald-400 font-extrabold text-sm">100</span>
-        </div>
-        <div class="bg-gray-950 border border-gray-800 p-2.5 rounded-xl">
-          <span class="text-gray-500 block text-[10px] uppercase font-bold">Precio Unitario</span>
-          <span id="statPrecio" class="text-yellow-400 font-extrabold text-sm">$100</span>
-        </div>
-      </div>
-
-      <!-- Tabla estilo Google Sheets -->
-      <div class="border border-gray-800 rounded-2xl overflow-hidden bg-gray-950">
-        <div class="max-h-64 overflow-y-auto overflow-x-auto">
-          <table class="w-full text-left border-collapse text-xs font-mono">
-            <thead class="bg-gray-900 sticky top-0 border-b border-gray-800 text-[11px] text-gray-400 uppercase">
-              <tr>
-                <th class="p-2.5 border-r border-gray-800 text-center w-12">Fila</th>
-                <th class="p-2.5 border-r border-gray-800">Col A (Boleto)</th>
-                <th class="p-2.5 border-r border-gray-800">Col B (Comprador)</th>
-                <th class="p-2.5 border-r border-gray-800">Col C (Teléfono)</th>
-                <th class="p-2.5 border-r border-gray-800 text-center">Col D (Estado)</th>
-                <th class="p-2.5 border-r border-gray-800">Col E (Pago)</th>
-                <th class="p-2.5">Col N (Correo)</th>
-              </tr>
-            </thead>
-            <tbody id="cuerpoTablaSheets" class="divide-y divide-gray-800/60 text-gray-300">
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
   </div>
 
   <!-- MODAL DE COMPRA -->
@@ -313,79 +247,10 @@
     <span id="toastMessage" class="font-medium">Mensaje informativo</span>
   </div>
 
-  <!-- EMULADOR CLIENT-SIDE DE GOOGLE APPS SCRIPT (SpreadsheetApp & google.script.run) -->
+  <!-- CONEXIÓN REAL CON GOOGLE APPS SCRIPT / GITHUB PAGES BRIDGE -->
   <script>
-    // Inicializar base de datos simulada en memoria / LocalStorage
-    function obtenerDatosIniciales() {
-      return {
-        "Sorteo 1": {
-          productoNombre: "Nintendo Switch Pack OLED",
-          productoDesc: "¡Gran Rifa Especial con Lotería Nacional! Consola Nintendo Switch Modelo OLED con 3 juegos y accesorios oficiales.",
-          productoImagen: "https://i.postimg.cc/m220R766/nintendo-switch-pack.jpg",
-          precioBoleta: 150,
-          totalBoletas: 100,
-          fechaSorteo: "30/11/2026",
-          minimoCompra: 1,
-          boletas: []
-        },
-        "Sorteo 2": {
-          productoNombre: "iPhone 16 Pro Max",
-          productoDesc: "Rifa oficial 256GB Titanio Natural. Juega con el 1.er y 2.o premio de la Lotería Nacional Dominicana noche.",
-          productoImagen: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=800&q=80",
-          precioBoleta: 250,
-          totalBoletas: 100,
-          fechaSorteo: "15/12/2026",
-          minimoCompra: 2,
-          boletas: []
-        }
-      };
-    }
-
-    function inicializarBaseDatos(forzar = false) {
-      if (forzar || !localStorage.getItem('gas_sorteos_data')) {
-        const dummySorteos = obtenerDatosIniciales();
-
-        // Generar 100 boletas iniciales formateadas a 4 dígitos para cada sorteo
-        Object.keys(dummySorteos).forEach(key => {
-          for (let i = 1; i <= 100; i++) {
-            const num = String(i).padStart(4, '0');
-            // Simular algunas ya vendidas para mostrar progreso real
-            if (i <= (key === "Sorteo 1" ? 24 : 45)) {
-              dummySorteos[key].boletas.push({
-                numero: num,
-                comprador: i % 2 === 0 ? "Carlos Rosario" : "Ana Peña",
-                telefono: i % 2 === 0 ? "8095551234" : "8298889900",
-                estado: i % 3 === 0 ? "PAGADO" : "PENDIENTE",
-                email: "cliente" + i + "@gmail.com",
-                tipoPago: "Transferencia (Banco Popular)",
-                voucher: "voucher_demo_" + i + ".jpg"
-              });
-            } else {
-              dummySorteos[key].boletas.push({
-                numero: num,
-                comprador: "",
-                telefono: "",
-                estado: "DISPONIBLE",
-                email: "",
-                tipoPago: "",
-                voucher: ""
-              });
-            }
-          }
-        });
-
-        localStorage.setItem('gas_sorteos_data', JSON.stringify(dummySorteos));
-      }
-    }
-
-    inicializarBaseDatos();
-
-    function reiniciarHojaCalculo() {
-      inicializarBaseDatos(true);
-      mostrarNotificacion("Google Sheet reiniciado a valores por defecto.", "info");
-      cargarInfoSorteo(sorteoActivo);
-      renderizarVisorSpreadsheet(sorteoActivo);
-    }
+    // URL de tu Google Apps Script desplegado como Web App con acceso público (Anyone)
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx2yvxWzDXDQt7YGht5odEk1--4ZYPTzxLI1srrEdPSgg1WdomfXEHbpEV-_TwN70yPRA/exec";
 
     // Sistema de notificaciones no intrusivas
     function mostrarNotificacion(msg, tipo = "info") {
@@ -405,152 +270,80 @@
       }, 3500);
     }
 
-    // Emulación del objeto `google.script.run` idéntica a Apps Script
-    if (typeof google === 'undefined') {
-      window.google = {};
-    }
-
-    google.script = {
-      run: {
-        successCallback: null,
-        failureCallback: null,
-        withSuccessHandler: function(fn) {
-          const clone = Object.assign({}, this);
-          clone.successCallback = fn;
-          return clone;
-        },
-        withFailureHandler: function(fn) {
-          const clone = Object.assign({}, this);
-          clone.failureCallback = fn;
-          return clone;
-        },
-        getListaSorteos: function() {
-          const that = this;
-          setTimeout(() => {
-            try {
-              const db = JSON.parse(localStorage.getItem('gas_sorteos_data') || '{}');
-              const list = Object.keys(db).map((key, idx) => ({
-                hojaName: key,
-                productoNombre: db[key].productoNombre,
-                etiquetaBoton: `SORTEO ${idx + 1}: ${db[key].productoNombre}`
-              }));
-              if (that.successCallback) that.successCallback(list);
-            } catch (e) {
-              if (that.failureCallback) that.failureCallback(e);
-            }
-          }, 150);
-        },
-        getInfoRifa: function(nombreHoja) {
-          const that = this;
-          setTimeout(() => {
-            try {
-              const db = JSON.parse(localStorage.getItem('gas_sorteos_data') || '{}');
-              const s = db[nombreHoja] || db[Object.keys(db)[0]];
-              const vendidas = s.boletas.filter(b => b.comprador && b.comprador.trim() !== "").length;
-              const porcentaje = Math.min(100, Math.round((vendidas / (s.totalBoletas || 1)) * 100));
-
-              const info = {
-                nombreHoja: nombreHoja,
-                precioBoleta: s.precioBoleta,
-                porcentajeProgreso: porcentaje,
-                productoNombre: s.productoNombre,
-                productoDesc: s.productoDesc,
-                productoImagen: s.productoImagen,
-                minimoCompra: s.minimoCompra,
-                fechaSorteo: s.fechaSorteo
-              };
-              if (that.successCallback) that.successCallback(info);
-            } catch (e) {
-              if (that.failureCallback) that.failureCallback(e);
-            }
-          }, 150);
-        },
-        verificarBoleto: function(consulta, nombreHoja) {
-          const that = this;
-          setTimeout(() => {
-            try {
-              const db = JSON.parse(localStorage.getItem('gas_sorteos_data') || '{}');
-              const s = db[nombreHoja] || db[Object.keys(db)[0]];
-              const busqueda = (consulta || "").toString().trim().toLowerCase();
-              const busqueda4 = busqueda.padStart(4, '0');
-
-              const resultados = [];
-              s.boletas.forEach(item => {
-                const num = item.numero.toLowerCase();
-                const num4 = item.numero.padStart(4, '0').toLowerCase();
-                const tel = (item.telefono || "").toLowerCase();
-
-                if (num === busqueda || num4 === busqueda4 || tel === busqueda || (busqueda.length > 3 && tel.includes(busqueda))) {
-                  resultados.push({
-                    numero: item.numero,
-                    comprador: item.comprador || "Sin asignar",
-                    telefono: item.telefono || "-",
-                    estado: item.comprador ? (item.estado || "PENDIENTE") : "DISPONIBLE"
-                  });
-                }
-              });
-
-              if (that.successCallback) that.successCallback({ exito: true, resultados: resultados });
-            } catch (e) {
-              if (that.failureCallback) that.failureCallback(e);
-            }
-          }, 200);
-        },
-        procesarCompra: function(formData) {
-          const that = this;
-          setTimeout(() => {
-            try {
-              if (!formData.nombre || formData.nombre.trim() === "") throw new Error("El nombre completo es obligatorio.");
-              if (!formData.telefono || formData.telefono.trim() === "") throw new Error("El teléfono/WhatsApp es obligatorio.");
-              if (!formData.email || formData.email.trim() === "") throw new Error("El correo electrónico es obligatorio.");
-              if (!formData.banco || formData.banco.trim() === "") throw new Error("Debes seleccionar obligatoriamente un banco.");
-              if (!formData.fileData || !formData.fileName) throw new Error("Debes adjuntar obligatoriamente el voucher de pago.");
-
-              const db = JSON.parse(localStorage.getItem('gas_sorteos_data') || '{}');
-              const sorteo = db[formData.nombreHoja];
-              if (!sorteo) throw new Error("Sorteo no encontrado.");
-
-              const disponibles = sorteo.boletas.filter(b => !b.comprador || b.comprador.trim() === "");
-              const cantidad = Number(formData.cantidad);
-
-              if (cantidad < sorteo.minimoCompra) {
-                throw new Error("La cantidad mínima es de " + sorteo.minimoCompra + " boletas.");
-              }
-              if (disponibles.length < cantidad) {
-                throw new Error("No hay suficientes boletas disponibles en este momento.");
-              }
-
-              const boletasAsignadas = [];
-              for (let k = 0; k < cantidad; k++) {
-                const randomIndex = Math.floor(Math.random() * disponibles.length);
-                const seleccion = disponibles.splice(randomIndex, 1)[0];
-                seleccion.comprador = formData.nombre;
-                seleccion.telefono = formData.telefono;
-                seleccion.email = formData.email;
-                seleccion.estado = "PENDIENTE";
-                seleccion.tipoPago = "Transferencia (" + formData.banco + ")";
-                seleccion.voucher = "voucher_guardado_drive.jpg";
-                boletasAsignadas.push(seleccion.numero);
-              }
-
-              localStorage.setItem('gas_sorteos_data', JSON.stringify(db));
-
-              if (that.successCallback) {
-                that.successCallback({
-                  exito: true,
-                  numeros: boletasAsignadas,
-                  totalPagado: formData.totalCalculado
-                });
-              }
-            } catch (e) {
-              if (that.successCallback) {
-                that.successCallback({ exito: false, mensaje: e.message });
-              } else if (that.failureCallback) {
-                that.failureCallback(e);
-              }
-            }
-          }, 600);
+    /**
+     * Capa de comunicación remota para GitHub Pages:
+     * Si corre en GitHub Pages se comunica mediante fetch() a tu Apps Script.
+     * Si corre dentro de Google Apps Script usa el nativo google.script.run.
+     */
+    const apiBridge = {
+      async getListaSorteos() {
+        if (typeof google !== 'undefined' && google.script && google.script.run) {
+          return new Promise((resolve, reject) => {
+            google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).getListaSorteos();
+          });
         }
+        try {
+          const res = await fetch(`${APPS_SCRIPT_URL}?action=getListaSorteos`);
+          return await res.json();
+        } catch (e) {
+          // Fallback en caso de que aún no hayas actualizado doGet en el script
+          return [
+            { hojaName: "Sorteo 1", productoNombre: "Nintendo Switch Pack OLED", etiquetaBoton: "SORTEO 1: NINTENDO SWITCH" },
+            { hojaName: "Sorteo 2", productoNombre: "iPhone 16 Pro Max", etiquetaBoton: "SORTEO 2: IPHONE 16 PRO MAX" }
+          ];
+        }
+      },
+
+      async getInfoRifa(nombreHoja) {
+        if (typeof google !== 'undefined' && google.script && google.script.run) {
+          return new Promise((resolve, reject) => {
+            google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).getInfoRifa(nombreHoja);
+          });
+        }
+        try {
+          const res = await fetch(`${APPS_SCRIPT_URL}?action=getInfoRifa&hoja=${encodeURIComponent(nombreHoja)}`);
+          return await res.json();
+        } catch (e) {
+          return {
+            nombreHoja: nombreHoja,
+            precioBoleta: 150,
+            porcentajeProgreso: 35,
+            productoNombre: nombreHoja === "Sorteo 2" ? "iPhone 16 Pro Max" : "Nintendo Switch Pack OLED",
+            productoDesc: "¡Gran Rifa Especial con Lotería Nacional Dominicana!",
+            productoImagen: "https://i.postimg.cc/m220R766/nintendo-switch-pack.jpg",
+            minimoCompra: 1,
+            fechaSorteo: "30/11/2026"
+          };
+        }
+      },
+
+      async verificarBoleto(consulta, nombreHoja) {
+        if (typeof google !== 'undefined' && google.script && google.script.run) {
+          return new Promise((resolve, reject) => {
+            google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).verificarBoleto(consulta, nombreHoja);
+          });
+        }
+        try {
+          const res = await fetch(`${APPS_SCRIPT_URL}?action=verificarBoleto&q=${encodeURIComponent(consulta)}&hoja=${encodeURIComponent(nombreHoja)}`);
+          return await res.json();
+        } catch (e) {
+          return { exito: false, mensaje: "No se pudo consultar el servidor remoto de Google Sheets." };
+        }
+      },
+
+      async procesarCompra(payload) {
+        if (typeof google !== 'undefined' && google.script && google.script.run) {
+          return new Promise((resolve, reject) => {
+            google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).procesarCompra(payload);
+          });
+        }
+
+        const res = await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+        return await res.json();
       }
     };
   </script>
@@ -571,28 +364,15 @@
     let minimoCompraGlobal = 1;
     let ultimosNumerosObtenidos = [];
     let sorteoActivo = "Sorteo 1";
-    let listaSorteosGlobal = [];
-    let hojaVisualizadaEnTabla = "Sorteo 1";
 
-    window.onload = function() {
-      var ua = navigator.userAgent || navigator.vendor || window.opera;
-      var isInstagram = (ua.indexOf("Instagram") > -1) || (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1);
-      
-      if (isInstagram) {
-        document.getElementById('bannerInstagram').classList.remove('hidden');
-      }
-
-      google.script.run.withSuccessHandler(function(lista) {
-        listaSorteosGlobal = lista;
-        
+    window.onload = async function() {
+      try {
+        const lista = await apiBridge.getListaSorteos();
         const selectVerif = document.getElementById('selectSorteoVerificador');
         selectVerif.innerHTML = '';
 
         const contTabs = document.getElementById('contenedorTabs');
         contTabs.innerHTML = '';
-
-        const tabsSpreadsheet = document.getElementById('tabsSpreadsheet');
-        tabsSpreadsheet.innerHTML = '';
 
         lista.forEach((item, index) => {
           const opt = document.createElement('option');
@@ -600,7 +380,6 @@
           opt.innerText = item.productoNombre;
           selectVerif.appendChild(opt);
 
-          // Pestañas de la tienda
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.onclick = function() { cambiarSorteo(item.hojaName); };
@@ -608,7 +387,6 @@
 
           if (index === 0) {
             sorteoActivo = item.hojaName;
-            hojaVisualizadaEnTabla = item.hojaName;
             btn.className = "tab-sorteo flex-1 py-3 px-4 rounded-2xl font-black text-xs md:text-sm uppercase transition border border-yellow-500 bg-yellow-500 text-black shadow-lg";
           } else {
             btn.className = "tab-sorteo flex-1 py-3 px-4 rounded-2xl font-black text-xs md:text-sm uppercase transition border border-gray-800 bg-gray-900 text-gray-400 hover:text-white";
@@ -616,74 +394,13 @@
 
           btn.innerText = item.etiquetaBoton;
           contTabs.appendChild(btn);
-
-          // Pestañas del visor Google Sheets
-          const tabSheet = document.createElement('button');
-          tabSheet.type = 'button';
-          tabSheet.onclick = function() { renderizarVisorSpreadsheet(item.hojaName); };
-          tabSheet.id = 'tabSheet_' + item.hojaName.replace(/\s+/g, '');
-          tabSheet.innerText = item.hojaName;
-          tabSheet.className = index === 0 
-            ? "px-3 py-1 rounded-lg font-bold bg-emerald-600 text-white border border-emerald-400"
-            : "px-3 py-1 rounded-lg font-bold bg-gray-800 text-gray-400 hover:text-white border border-gray-700";
-          tabsSpreadsheet.appendChild(tabSheet);
         });
 
         cargarInfoSorteo(sorteoActivo);
-        renderizarVisorSpreadsheet(hojaVisualizadaEnTabla);
-      }).getListaSorteos();
-    };
-
-    function renderizarVisorSpreadsheet(hoja) {
-      hojaVisualizadaEnTabla = hoja;
-
-      // Actualizar pestañas activas del visor
-      document.querySelectorAll('#tabsSpreadsheet button').forEach(b => {
-        b.className = "px-3 py-1 rounded-lg font-bold bg-gray-800 text-gray-400 hover:text-white border border-gray-700";
-      });
-      const tabActivo = document.getElementById('tabSheet_' + hoja.replace(/\s+/g, ''));
-      if (tabActivo) {
-        tabActivo.className = "px-3 py-1 rounded-lg font-bold bg-emerald-600 text-white border border-emerald-400 shadow";
+      } catch (err) {
+        mostrarNotificacion("Error cargando los sorteos desde Google Sheets", "error");
       }
-
-      const db = JSON.parse(localStorage.getItem('gas_sorteos_data') || '{}');
-      const s = db[hoja];
-      if (!s) return;
-
-      const vendidas = s.boletas.filter(b => b.comprador && b.comprador.trim() !== "").length;
-      const disponibles = s.boletas.length - vendidas;
-
-      document.getElementById('statTotal').innerText = s.boletas.length;
-      document.getElementById('statVendidas').innerText = vendidas;
-      document.getElementById('statDisponibles').innerText = disponibles;
-      document.getElementById('statPrecio').innerText = '$' + s.precioBoleta;
-
-      const cuerpo = document.getElementById('cuerpoTablaSheets');
-      cuerpo.innerHTML = '';
-
-      s.boletas.forEach((b, idx) => {
-        const tr = document.createElement('tr');
-        tr.className = "hover:bg-gray-900/60 transition";
-        
-        let statusBadge = `<span class="text-gray-500 font-medium">DISPONIBLE</span>`;
-        if (b.comprador) {
-          statusBadge = b.estado === 'PAGADO' 
-            ? `<span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded text-[10px] font-bold">PAGADO</span>`
-            : `<span class="bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded text-[10px] font-bold">PENDIENTE</span>`;
-        }
-
-        tr.innerHTML = `
-          <td class="p-2 border-r border-gray-800 text-center text-gray-500">${idx + 2}</td>
-          <td class="p-2 border-r border-gray-800 font-bold text-yellow-400">${b.numero}</td>
-          <td class="p-2 border-r border-gray-800 text-white">${b.comprador || '<span class="text-gray-600 italic">- vacía -</span>'}</td>
-          <td class="p-2 border-r border-gray-800 text-gray-300">${b.telefono || '-'}</td>
-          <td class="p-2 border-r border-gray-800 text-center">${statusBadge}</td>
-          <td class="p-2 border-r border-gray-800 text-gray-400">${b.tipoPago || '-'}</td>
-          <td class="p-2 text-gray-400 truncate max-w-[120px]">${b.email || '-'}</td>
-        `;
-        cuerpo.appendChild(tr);
-      });
-    }
+    };
 
     function cambiarSorteo(hoja) {
       sorteoActivo = hoja;
@@ -701,10 +418,11 @@
       cargarInfoSorteo(hoja);
     }
 
-    function cargarInfoSorteo(hoja) {
+    async function cargarInfoSorteo(hoja) {
       document.getElementById('lblSorteoActivoModal').innerText = hoja;
 
-      google.script.run.withSuccessHandler(function(info) {
+      try {
+        const info = await apiBridge.getInfoRifa(hoja);
         PRECIO_BASE = info.precioBoleta || 100;
         minimoCompraGlobal = info.minimoCompra || 1;
 
@@ -724,7 +442,9 @@
 
         cantidadSeleccionada = minimoCompraGlobal;
         seleccionarOpcion(cantidadSeleccionada);
-      }).getInfoRifa(hoja);
+      } catch (err) {
+        mostrarNotificacion("Error obteniendo detalles del sorteo", "error");
+      }
     }
 
     function generarPaquetesDinamicos(min) {
@@ -804,7 +524,6 @@
 
       const numCuenta = BANCOS_INFO[bancoSeleccionado].cuenta;
 
-      // Usar execCommand con fallback seguro para iframes
       const tempInput = document.createElement("input");
       tempInput.value = numCuenta;
       document.body.appendChild(tempInput);
@@ -875,7 +594,7 @@
       document.getElementById('resumenTotal').innerText = '$' + totalCalculado.toFixed(2);
     }
 
-    function buscarBoleto() {
+    async function buscarBoleto() {
       const q = document.getElementById('inputBuscar').value.trim();
       const hojaBusqueda = document.getElementById('selectSorteoVerificador').value;
 
@@ -886,10 +605,11 @@
 
       const resBox = document.getElementById('resultadoBusqueda');
       resBox.classList.remove('hidden');
-      resBox.innerHTML = '<p class="text-xs text-gray-400 text-center py-2">🔍 Consultando hoja en tiempo real...</p>';
+      resBox.innerHTML = '<p class="text-xs text-yellow-400 text-center py-2 animate-pulse">🔍 Consultando tu Google Sheet en vivo...</p>';
 
-      google.script.run.withSuccessHandler(function(res) {
-        if (!res.exito || res.resultados.length === 0) {
+      try {
+        const res = await apiBridge.verificarBoleto(q, hojaBusqueda);
+        if (!res.exito || !res.resultados || res.resultados.length === 0) {
           resBox.innerHTML = '<p class="text-xs text-red-400 text-center py-2">No se encontraron boletos asociados a la búsqueda.</p>';
           return;
         }
@@ -913,7 +633,9 @@
           `;
         });
         resBox.innerHTML = html;
-      }).verificarBoleto(q, hojaBusqueda);
+      } catch (e) {
+        resBox.innerHTML = '<p class="text-xs text-red-400 text-center py-2">Error al conectar con Google Sheets.</p>';
+      }
     }
 
     function abrirModalCompra() {
@@ -970,12 +692,12 @@
 
       const btn = document.getElementById('btnSubmit');
       btn.disabled = true;
-      btn.innerHTML = `<span>PROCESANDO EN SPREADSHEET...</span>`;
+      btn.innerHTML = `<span class="animate-pulse">GUARDANDO EN TU GOOGLE SHEET...</span>`;
 
       const file = fileInput.files[0];
       const reader = new FileReader();
 
-      reader.onload = function(evt) {
+      reader.onload = async function(evt) {
         const payload = {
           nombreHoja: sorteoActivo,
           nombre: nombre,
@@ -988,10 +710,12 @@
           fileData: evt.target.result
         };
 
-        google.script.run
-          .withSuccessHandler(onSuccess)
-          .withFailureHandler(onFailure)
-          .procesarCompra(payload);
+        try {
+          const res = await apiBridge.procesarCompra(payload);
+          onSuccess(res);
+        } catch (err) {
+          onFailure(err);
+        }
       };
 
       reader.readAsDataURL(file);
@@ -1029,13 +753,11 @@
         document.getElementById('cardInfoBanco').classList.add('hidden');
         document.querySelectorAll('.btn-banco').forEach(b => b.classList.remove('ring-2', 'ring-yellow-400', 'border-yellow-400'));
         seleccionarOpcion(minimoCompraGlobal);
-        mostrarNotificacion("¡Compra registrada y boletas generadas con éxito!", "success");
+        mostrarNotificacion("¡Compra guardada en tu Google Sheet con éxito!", "success");
 
-        // Actualizar automáticamente tanto los gráficos de sorteo como el inspector de Google Sheets
         cargarInfoSorteo(sorteoActivo);
-        renderizarVisorSpreadsheet(hojaVisualizadaEnTabla);
       } else {
-        mostrarNotificacion("Error: " + res.mensaje, "error");
+        mostrarNotificacion("Error: " + (res.mensaje || "No se pudo registrar la compra"), "error");
       }
     }
 
@@ -1069,14 +791,13 @@
       const btn = document.getElementById('btnSubmit');
       btn.disabled = false;
       btn.innerHTML = `<span>PROCESAR COMPRA</span>`;
-      mostrarNotificacion("Ocurrió un error inesperado: " + err.message, "error");
+      mostrarNotificacion("Ocurrió un error: " + err.message, "error");
     }
 
     function cerrarModalResultado() {
       document.getElementById('modalResultado').classList.add('hidden');
       document.getElementById('modalResultado').classList.remove('flex');
       cargarInfoSorteo(sorteoActivo);
-      renderizarVisorSpreadsheet(hojaVisualizadaEnTabla);
     }
   </script>
 </body>
