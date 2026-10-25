@@ -239,8 +239,7 @@
 
   <!-- SCRIPT CONECTOR CLIENTE -->
   <script>
-    // URL activa de tu Web App en Google Apps Script
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyKzgwK_OY--TrQp4R-SbkNfw8FklCZVfsEIeUvaLV5lrLwbczBedsSnpKVlmr3sF6l1Q/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbztLIKp1ObQHgOLNg0p4qyLeCsE36VtDSeiUK8MfKiv_TVwzvT-1-wUT6PdpsrjexlU3w/exec";
 
     const BANCOS_INFO = {
       "Banco Popular": { cuenta: "857506661", tipo: "Cuenta Corriente", cedula: "402-2523002-4", titular: "Nathanael Guzman" },
@@ -257,9 +256,6 @@
     let ultimosNumerosObtenidos = [];
     let sorteoActivo = "Sorteo 1";
 
-    /**
-     * Llamada anti-CORS mediante JSONP con Timeout controlado
-     */
     function apiCallJSONP(action, params = {}) {
       return new Promise((resolve, reject) => {
         const callbackName = 'jsonp_cb_' + Math.round(1000000 * Math.random());
@@ -298,7 +294,6 @@
       });
     }
 
-    // Inicialización al cargar la página
     window.onload = function() {
       apiCallJSONP('getListaSorteos')
         .then(lista => {
@@ -612,8 +607,7 @@
       const email = document.getElementById('email').value.trim();
       const fileInput = document.getElementById('voucherFile');
 
-      const inputCantidad = parseInt(document.getElementById('cantLibre').value, 10);
-      const boletasAComprar = (!isNaN(inputCantidad) && inputCantidad > 0) ? inputCantidad : cantidadSeleccionada;
+      const boletasAComprar = parseInt(cantidadSeleccionada, 10);
 
       if (!nombre || !telefono || !email) {
         alert("Por favor completa todos tus datos personales.");
@@ -626,8 +620,8 @@
         return;
       }
 
-      if (boletasAComprar < minimoCompraGlobal) {
-        alert("La cantidad mínima permitida es de " + minimoCompraGlobal + " boleta(s).");
+      if (isNaN(boletasAComprar) || boletasAComprar < minimoCompraGlobal) {
+        alert("La cantidad mínima requerida es de " + minimoCompraGlobal + " boleta(s).");
         return;
       }
 
@@ -656,32 +650,34 @@
           fileData: evt.target.result
         };
 
-        // Realizamos la llamada POST
         fetch(SCRIPT_URL, {
           method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(payload)
         })
-        .then(() => {
-          // Consultar inmediatamente las boletas asignadas a este comprador tomando exactamente la cantidad comprada
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.exito) {
+            finalizarCompraExitosa(data.numeros || []);
+          } else {
+            throw new Error(data.mensaje || "Error al procesar los datos");
+          }
+        })
+        .catch(err => {
           setTimeout(() => {
             apiCallJSONP('verificarBoleto', { q: telefono, hoja: sorteoActivo })
               .then(resVerif => {
                 let nums = [];
                 if (resVerif && resVerif.resultados && resVerif.resultados.length > 0) {
-                  // Tomar exactamente las últimas N boletas compradas
                   nums = resVerif.resultados.map(r => r.numero).slice(-boletasAComprar);
                 }
                 finalizarCompraExitosa(nums);
               })
-              .catch(() => finalizarCompraExitosa([]));
+              .catch(() => {
+                btn.disabled = false;
+                btn.innerHTML = `<span>PROCESAR COMPRA</span>`;
+                alert("Hubo un inconveniente al registrar la compra: " + err.message);
+              });
           }, 3500);
-        })
-        .catch(err => {
-          btn.disabled = false;
-          btn.innerHTML = `<span>PROCESAR COMPRA</span>`;
-          alert("Ocurrió un error al enviar: " + err.message);
         });
       };
 
