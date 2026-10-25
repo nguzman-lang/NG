@@ -2,50 +2,19 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NG SUEÑA Y GANA</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- SCRIPT DE REDIRECCIÓN AUTOMÁTICA FUERA DE INSTAGRAM -->
-  <script>
-    (function() {
-      var ua = navigator.userAgent || navigator.vendor || window.opera;
-      var isInstagram = (ua.indexOf("Instagram") > -1) || (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1);
-      var isIOS = /iPhone|iPad|iPod/i.test(ua);
-      var isAndroid = /Android/i.test(ua);
-
-      if (isInstagram) {
-        // SI ES ANDROID: Forzar apertura automática en la aplicación de Google Chrome
-        if (isAndroid) {
-          var rawUrl = window.location.href.replace(/^https?:\/\//, '');
-          window.location.href = "intent://" + rawUrl + "#Intent;scheme=https;package=com.android.chrome;end";
-        }
-        // SI ES IPHONE (iOS): Intentar puente directo a Safari
-        else if (isIOS) {
-          if (window.location.search.indexOf("ext=1") === -1) {
-            var targetUrl = window.location.href + (window.location.search ? "&ext=1" : "?ext=1");
-            window.location.href = "x-web-search://?" + targetUrl;
-          }
-        }
-      }
-    })();
-  </script>
 </head>
-<body class="bg-gray-950 text-gray-100 min-h-screen py-6 px-4 font-sans">
-
-  <!-- BOTÓN/BANNER DE EMERGENCIA PARA NAVEGADOR EXTERNO -->
-  <div id="bannerInstagram" class="hidden max-w-3xl mx-auto mb-6 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-black p-4 rounded-2xl text-center shadow-2xl border border-yellow-300">
-    <p class="font-black text-sm uppercase tracking-wide">🚀 Para continuar tu compra en Safari/Chrome:</p>
-    <p class="text-xs mt-1 font-bold">Toca los <span class="bg-black text-white px-2 py-0.5 rounded-md">3 puntos (···)</span> arriba a la derecha y selecciona <u>"Abrir en el navegador"</u>.</p>
-    <button onclick="abrirNavegadorExternoManualmente()" class="mt-3 bg-black text-yellow-400 font-extrabold px-4 py-2 rounded-xl text-xs uppercase tracking-wider hover:bg-gray-900 transition shadow-lg">
-      🌐 Toca aquí para abrir en navegador externo
-    </button>
-  </div>
+<body class="bg-gray-950 text-gray-100 min-h-screen py-6 px-4 font-sans antialiased selection:bg-yellow-500 selection:text-black">
 
   <div class="max-w-3xl mx-auto space-y-6">
 
     <!-- Encabezado Principal con Logo -->
     <div class="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border border-yellow-500/30 rounded-3xl p-6 shadow-2xl text-center relative overflow-hidden flex flex-col items-center justify-center gap-3">
-      <img id="logoPagina" src="https://lh3.googleusercontent.com/d/1LDeeV_wCB-tN2s_XuVIXEwbYKEgQjQ8e" alt="NG SUEÑA Y GANA" class="h-20 md:h-24 object-contain rounded-2xl shadow-lg border border-yellow-500/30">
+      <img id="logoPagina" src="https://lh3.googleusercontent.com/d/1LDeeV_wCB-tN2s_XuVIXEwbYKEgQjQ8e" alt="NG SUEÑA Y GANA" 
+           onerror="this.onerror=null; this.src='https://placehold.co/240x100/18181b/eab308?text=NG+SUE%C3%91A+Y+GANA';"
+           class="h-20 md:h-24 object-contain rounded-2xl shadow-lg border border-yellow-500/30">
       
       <h1 class="text-3xl md:text-5xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 uppercase">
         NG SUEÑA Y GANA
@@ -70,7 +39,9 @@
     <!-- TARJETA DEL PRODUCTO & BARRA DE PROGRESO -->
     <div class="bg-gray-900/90 border border-gray-800 rounded-3xl overflow-hidden shadow-2xl">
       <div class="relative w-full h-72 md:h-96 bg-gray-950 flex items-center justify-center overflow-hidden border-b border-gray-800">
-        <img id="imgProducto" src="https://i.postimg.cc/m220R766/nintendo-switch-pack.jpg" alt="Producto Rifa" class="w-full h-full object-cover">
+        <img id="imgProducto" src="https://i.postimg.cc/m220R766/nintendo-switch-pack.jpg" alt="Producto Rifa" 
+             onerror="this.onerror=null; this.src='https://placehold.co/800x600/18181b/eab308?text=Premio+Sorteo';"
+             class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent"></div>
         <div class="absolute top-4 right-4 bg-yellow-500 text-black text-xs font-black px-3 py-1.5 rounded-full shadow-lg uppercase">
           En Juego 🔥
@@ -131,6 +102,72 @@
       </div>
     </div>
 
+    <!-- VISOR / SIMULADOR DE GOOGLE SHEETS EN VIVO -->
+    <div class="bg-gray-900 border border-emerald-500/30 rounded-3xl p-6 shadow-2xl space-y-4">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-gray-800 pb-4">
+        <div>
+          <h3 class="text-base md:text-lg font-black text-emerald-400 flex items-center gap-2">
+            <span>📊</span>
+            <span>GOOGLE SHEETS: BASE DE DATOS EN VIVO</span>
+          </h3>
+          <p class="text-xs text-gray-400">Inspecciona y administra las filas tal cual se registran en tu hoja de cálculo.</p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="reiniciarHojaCalculo()" class="text-xs bg-red-950/60 hover:bg-red-900 border border-red-500/40 text-red-300 font-bold px-3 py-1.5 rounded-xl transition">
+            🔄 Resetear Hoja
+          </button>
+        </div>
+      </div>
+
+      <!-- Selector de pestaña del Sheets -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+        <span class="text-gray-400 font-bold uppercase text-[11px]">Hojas:</span>
+        <div id="tabsSpreadsheet" class="flex gap-2"></div>
+      </div>
+
+      <!-- Estadísticas rápidas de la hoja -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+        <div class="bg-gray-950 border border-gray-800 p-2.5 rounded-xl">
+          <span class="text-gray-500 block text-[10px] uppercase font-bold">Total Boletas</span>
+          <span id="statTotal" class="text-white font-extrabold text-sm">100</span>
+        </div>
+        <div class="bg-gray-950 border border-gray-800 p-2.5 rounded-xl">
+          <span class="text-gray-500 block text-[10px] uppercase font-bold">Vendidas/Pendientes</span>
+          <span id="statVendidas" class="text-amber-400 font-extrabold text-sm">0</span>
+        </div>
+        <div class="bg-gray-950 border border-gray-800 p-2.5 rounded-xl">
+          <span class="text-gray-500 block text-[10px] uppercase font-bold">Disponibles</span>
+          <span id="statDisponibles" class="text-emerald-400 font-extrabold text-sm">100</span>
+        </div>
+        <div class="bg-gray-950 border border-gray-800 p-2.5 rounded-xl">
+          <span class="text-gray-500 block text-[10px] uppercase font-bold">Precio Unitario</span>
+          <span id="statPrecio" class="text-yellow-400 font-extrabold text-sm">$100</span>
+        </div>
+      </div>
+
+      <!-- Tabla estilo Google Sheets -->
+      <div class="border border-gray-800 rounded-2xl overflow-hidden bg-gray-950">
+        <div class="max-h-64 overflow-y-auto overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs font-mono">
+            <thead class="bg-gray-900 sticky top-0 border-b border-gray-800 text-[11px] text-gray-400 uppercase">
+              <tr>
+                <th class="p-2.5 border-r border-gray-800 text-center w-12">Fila</th>
+                <th class="p-2.5 border-r border-gray-800">Col A (Boleto)</th>
+                <th class="p-2.5 border-r border-gray-800">Col B (Comprador)</th>
+                <th class="p-2.5 border-r border-gray-800">Col C (Teléfono)</th>
+                <th class="p-2.5 border-r border-gray-800 text-center">Col D (Estado)</th>
+                <th class="p-2.5 border-r border-gray-800">Col E (Pago)</th>
+                <th class="p-2.5">Col N (Correo)</th>
+              </tr>
+            </thead>
+            <tbody id="cuerpoTablaSheets" class="divide-y divide-gray-800/60 text-gray-300">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- MODAL DE COMPRA -->
@@ -157,7 +194,7 @@
 
           <div class="mt-3">
             <label class="block text-[11px] text-gray-400 mb-1">O escribe una cantidad personalizada:</label>
-            <input type="number" id="cantLibre" oninput="cambiarCantidadLibre()" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2 text-white placeholder-gray-600 focus:border-yellow-500 focus:outline-none text-sm" placeholder="Ej. 10">
+            <input type="number" id="cantLibre" min="1" oninput="cambiarCantidadLibre()" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2 text-white placeholder-gray-600 focus:border-yellow-500 focus:outline-none text-sm" placeholder="Ej. 10">
           </div>
         </div>
 
@@ -179,22 +216,30 @@
           
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
             <button type="button" onclick="seleccionarBanco('Banco Popular')" class="btn-banco border border-gray-800 bg-gray-950 p-2.5 rounded-2xl flex flex-col items-center justify-center gap-1.5 hover:border-yellow-500 transition" data-banco="Banco Popular">
-              <img src="https://lh3.googleusercontent.com/d/1t8dCzrgISFiFqldumf8GhzJY0PxQvAJK" alt="Popular" class="w-8 h-8 object-contain">
+              <img src="https://lh3.googleusercontent.com/d/1t8dCzrgISFiFqldumf8GhzJY0PxQvAJK" alt="Popular" 
+                   onerror="this.onerror=null; this.src='https://placehold.co/40x40/003882/ffffff?text=BPD';"
+                   class="w-8 h-8 object-contain">
               <span class="text-[11px] font-bold text-white">Popular</span>
             </button>
 
             <button type="button" onclick="seleccionarBanco('BHD')" class="btn-banco border border-gray-800 bg-gray-950 p-2.5 rounded-2xl flex flex-col items-center justify-center gap-1.5 hover:border-yellow-500 transition" data-banco="BHD">
-              <img src="https://lh3.googleusercontent.com/d/1ykBk04fq7Yq2joVj-N7ZpZtbNR4vGU3E" alt="BHD" class="w-8 h-8 object-contain">
+              <img src="https://lh3.googleusercontent.com/d/1ykBk04fq7Yq2joVj-N7ZpZtbNR4vGU3E" alt="BHD" 
+                   onerror="this.onerror=null; this.src='https://placehold.co/40x40/007a3d/ffffff?text=BHD';"
+                   class="w-8 h-8 object-contain">
               <span class="text-[11px] font-bold text-white">BHD</span>
             </button>
 
             <button type="button" onclick="seleccionarBanco('APAP')" class="btn-banco border border-gray-800 bg-gray-950 p-2.5 rounded-2xl flex flex-col items-center justify-center gap-1.5 hover:border-yellow-500 transition" data-banco="APAP">
-              <img src="https://lh3.googleusercontent.com/d/1WiXqhpBxtOfFjNSRKE5LpxSYd3TZl3T0" alt="APAP" class="w-8 h-8 object-contain">
+              <img src="https://lh3.googleusercontent.com/d/1WiXqhpBxtOfFjNSRKE5LpxSYd3TZl3T0" alt="APAP" 
+                   onerror="this.onerror=null; this.src='https://placehold.co/40x40/dc2626/ffffff?text=APAP';"
+                   class="w-8 h-8 object-contain">
               <span class="text-[11px] font-bold text-white">APAP</span>
             </button>
 
             <button type="button" onclick="seleccionarBanco('Qik')" class="btn-banco border border-gray-800 bg-gray-950 p-2.5 rounded-2xl flex flex-col items-center justify-center gap-1.5 hover:border-yellow-500 transition" data-banco="Qik">
-              <img src="https://lh3.googleusercontent.com/d/1xY7KaKZ8fgHHcR6pIp3ZO-Wy8ZrdtQu8" alt="Qik" class="w-8 h-8 object-contain">
+              <img src="https://lh3.googleusercontent.com/d/1xY7KaKZ8fgHHcR6pIp3ZO-Wy8ZrdtQu8" alt="Qik" 
+                   onerror="this.onerror=null; this.src='https://placehold.co/40x40/6d28d9/ffffff?text=Qik';"
+                   class="w-8 h-8 object-contain">
               <span class="text-[11px] font-bold text-white">Qik</span>
             </button>
           </div>
@@ -262,6 +307,255 @@
     </div>
   </div>
 
+  <!-- Contenedor flotante de notificación amigable (reemplazo sin alertas) -->
+  <div id="toastNotification" class="fixed bottom-5 right-5 z-50 transform translate-y-24 opacity-0 transition-all duration-300 bg-gray-900 border border-yellow-500 text-yellow-300 text-xs px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3">
+    <span id="toastIcon">ℹ️</span>
+    <span id="toastMessage" class="font-medium">Mensaje informativo</span>
+  </div>
+
+  <!-- EMULADOR CLIENT-SIDE DE GOOGLE APPS SCRIPT (SpreadsheetApp & google.script.run) -->
+  <script>
+    // Inicializar base de datos simulada en memoria / LocalStorage
+    function obtenerDatosIniciales() {
+      return {
+        "Sorteo 1": {
+          productoNombre: "Nintendo Switch Pack OLED",
+          productoDesc: "¡Gran Rifa Especial con Lotería Nacional! Consola Nintendo Switch Modelo OLED con 3 juegos y accesorios oficiales.",
+          productoImagen: "https://i.postimg.cc/m220R766/nintendo-switch-pack.jpg",
+          precioBoleta: 150,
+          totalBoletas: 100,
+          fechaSorteo: "30/11/2026",
+          minimoCompra: 1,
+          boletas: []
+        },
+        "Sorteo 2": {
+          productoNombre: "iPhone 16 Pro Max",
+          productoDesc: "Rifa oficial 256GB Titanio Natural. Juega con el 1.er y 2.o premio de la Lotería Nacional Dominicana noche.",
+          productoImagen: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=800&q=80",
+          precioBoleta: 250,
+          totalBoletas: 100,
+          fechaSorteo: "15/12/2026",
+          minimoCompra: 2,
+          boletas: []
+        }
+      };
+    }
+
+    function inicializarBaseDatos(forzar = false) {
+      if (forzar || !localStorage.getItem('gas_sorteos_data')) {
+        const dummySorteos = obtenerDatosIniciales();
+
+        // Generar 100 boletas iniciales formateadas a 4 dígitos para cada sorteo
+        Object.keys(dummySorteos).forEach(key => {
+          for (let i = 1; i <= 100; i++) {
+            const num = String(i).padStart(4, '0');
+            // Simular algunas ya vendidas para mostrar progreso real
+            if (i <= (key === "Sorteo 1" ? 24 : 45)) {
+              dummySorteos[key].boletas.push({
+                numero: num,
+                comprador: i % 2 === 0 ? "Carlos Rosario" : "Ana Peña",
+                telefono: i % 2 === 0 ? "8095551234" : "8298889900",
+                estado: i % 3 === 0 ? "PAGADO" : "PENDIENTE",
+                email: "cliente" + i + "@gmail.com",
+                tipoPago: "Transferencia (Banco Popular)",
+                voucher: "voucher_demo_" + i + ".jpg"
+              });
+            } else {
+              dummySorteos[key].boletas.push({
+                numero: num,
+                comprador: "",
+                telefono: "",
+                estado: "DISPONIBLE",
+                email: "",
+                tipoPago: "",
+                voucher: ""
+              });
+            }
+          }
+        });
+
+        localStorage.setItem('gas_sorteos_data', JSON.stringify(dummySorteos));
+      }
+    }
+
+    inicializarBaseDatos();
+
+    function reiniciarHojaCalculo() {
+      inicializarBaseDatos(true);
+      mostrarNotificacion("Google Sheet reiniciado a valores por defecto.", "info");
+      cargarInfoSorteo(sorteoActivo);
+      renderizarVisorSpreadsheet(sorteoActivo);
+    }
+
+    // Sistema de notificaciones no intrusivas
+    function mostrarNotificacion(msg, tipo = "info") {
+      const toast = document.getElementById('toastNotification');
+      const toastMsg = document.getElementById('toastMessage');
+      const toastIcon = document.getElementById('toastIcon');
+
+      toastMsg.innerText = msg;
+      toastIcon.innerText = tipo === "error" ? "⚠️" : (tipo === "success" ? "✅" : "🔔");
+
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 3500);
+    }
+
+    // Emulación del objeto `google.script.run` idéntica a Apps Script
+    if (typeof google === 'undefined') {
+      window.google = {};
+    }
+
+    google.script = {
+      run: {
+        successCallback: null,
+        failureCallback: null,
+        withSuccessHandler: function(fn) {
+          const clone = Object.assign({}, this);
+          clone.successCallback = fn;
+          return clone;
+        },
+        withFailureHandler: function(fn) {
+          const clone = Object.assign({}, this);
+          clone.failureCallback = fn;
+          return clone;
+        },
+        getListaSorteos: function() {
+          const that = this;
+          setTimeout(() => {
+            try {
+              const db = JSON.parse(localStorage.getItem('gas_sorteos_data') || '{}');
+              const list = Object.keys(db).map((key, idx) => ({
+                hojaName: key,
+                productoNombre: db[key].productoNombre,
+                etiquetaBoton: `SORTEO ${idx + 1}: ${db[key].productoNombre}`
+              }));
+              if (that.successCallback) that.successCallback(list);
+            } catch (e) {
+              if (that.failureCallback) that.failureCallback(e);
+            }
+          }, 150);
+        },
+        getInfoRifa: function(nombreHoja) {
+          const that = this;
+          setTimeout(() => {
+            try {
+              const db = JSON.parse(localStorage.getItem('gas_sorteos_data') || '{}');
+              const s = db[nombreHoja] || db[Object.keys(db)[0]];
+              const vendidas = s.boletas.filter(b => b.comprador && b.comprador.trim() !== "").length;
+              const porcentaje = Math.min(100, Math.round((vendidas / (s.totalBoletas || 1)) * 100));
+
+              const info = {
+                nombreHoja: nombreHoja,
+                precioBoleta: s.precioBoleta,
+                porcentajeProgreso: porcentaje,
+                productoNombre: s.productoNombre,
+                productoDesc: s.productoDesc,
+                productoImagen: s.productoImagen,
+                minimoCompra: s.minimoCompra,
+                fechaSorteo: s.fechaSorteo
+              };
+              if (that.successCallback) that.successCallback(info);
+            } catch (e) {
+              if (that.failureCallback) that.failureCallback(e);
+            }
+          }, 150);
+        },
+        verificarBoleto: function(consulta, nombreHoja) {
+          const that = this;
+          setTimeout(() => {
+            try {
+              const db = JSON.parse(localStorage.getItem('gas_sorteos_data') || '{}');
+              const s = db[nombreHoja] || db[Object.keys(db)[0]];
+              const busqueda = (consulta || "").toString().trim().toLowerCase();
+              const busqueda4 = busqueda.padStart(4, '0');
+
+              const resultados = [];
+              s.boletas.forEach(item => {
+                const num = item.numero.toLowerCase();
+                const num4 = item.numero.padStart(4, '0').toLowerCase();
+                const tel = (item.telefono || "").toLowerCase();
+
+                if (num === busqueda || num4 === busqueda4 || tel === busqueda || (busqueda.length > 3 && tel.includes(busqueda))) {
+                  resultados.push({
+                    numero: item.numero,
+                    comprador: item.comprador || "Sin asignar",
+                    telefono: item.telefono || "-",
+                    estado: item.comprador ? (item.estado || "PENDIENTE") : "DISPONIBLE"
+                  });
+                }
+              });
+
+              if (that.successCallback) that.successCallback({ exito: true, resultados: resultados });
+            } catch (e) {
+              if (that.failureCallback) that.failureCallback(e);
+            }
+          }, 200);
+        },
+        procesarCompra: function(formData) {
+          const that = this;
+          setTimeout(() => {
+            try {
+              if (!formData.nombre || formData.nombre.trim() === "") throw new Error("El nombre completo es obligatorio.");
+              if (!formData.telefono || formData.telefono.trim() === "") throw new Error("El teléfono/WhatsApp es obligatorio.");
+              if (!formData.email || formData.email.trim() === "") throw new Error("El correo electrónico es obligatorio.");
+              if (!formData.banco || formData.banco.trim() === "") throw new Error("Debes seleccionar obligatoriamente un banco.");
+              if (!formData.fileData || !formData.fileName) throw new Error("Debes adjuntar obligatoriamente el voucher de pago.");
+
+              const db = JSON.parse(localStorage.getItem('gas_sorteos_data') || '{}');
+              const sorteo = db[formData.nombreHoja];
+              if (!sorteo) throw new Error("Sorteo no encontrado.");
+
+              const disponibles = sorteo.boletas.filter(b => !b.comprador || b.comprador.trim() === "");
+              const cantidad = Number(formData.cantidad);
+
+              if (cantidad < sorteo.minimoCompra) {
+                throw new Error("La cantidad mínima es de " + sorteo.minimoCompra + " boletas.");
+              }
+              if (disponibles.length < cantidad) {
+                throw new Error("No hay suficientes boletas disponibles en este momento.");
+              }
+
+              const boletasAsignadas = [];
+              for (let k = 0; k < cantidad; k++) {
+                const randomIndex = Math.floor(Math.random() * disponibles.length);
+                const seleccion = disponibles.splice(randomIndex, 1)[0];
+                seleccion.comprador = formData.nombre;
+                seleccion.telefono = formData.telefono;
+                seleccion.email = formData.email;
+                seleccion.estado = "PENDIENTE";
+                seleccion.tipoPago = "Transferencia (" + formData.banco + ")";
+                seleccion.voucher = "voucher_guardado_drive.jpg";
+                boletasAsignadas.push(seleccion.numero);
+              }
+
+              localStorage.setItem('gas_sorteos_data', JSON.stringify(db));
+
+              if (that.successCallback) {
+                that.successCallback({
+                  exito: true,
+                  numeros: boletasAsignadas,
+                  totalPagado: formData.totalCalculado
+                });
+              }
+            } catch (e) {
+              if (that.successCallback) {
+                that.successCallback({ exito: false, mensaje: e.message });
+              } else if (that.failureCallback) {
+                that.failureCallback(e);
+              }
+            }
+          }, 600);
+        }
+      }
+    };
+  </script>
+
+  <!-- LÓGICA PRINCIPAL DE LA VISTA Y COMPORTAMIENTO -->
   <script>
     const BANCOS_INFO = {
       "Banco Popular": { cuenta: "857506661", tipo: "Cuenta Corriente", cedula: "402-2523002-4", titular: "Nathanael Guzman" },
@@ -278,6 +572,7 @@
     let ultimosNumerosObtenidos = [];
     let sorteoActivo = "Sorteo 1";
     let listaSorteosGlobal = [];
+    let hojaVisualizadaEnTabla = "Sorteo 1";
 
     window.onload = function() {
       var ua = navigator.userAgent || navigator.vendor || window.opera;
@@ -296,12 +591,16 @@
         const contTabs = document.getElementById('contenedorTabs');
         contTabs.innerHTML = '';
 
+        const tabsSpreadsheet = document.getElementById('tabsSpreadsheet');
+        tabsSpreadsheet.innerHTML = '';
+
         lista.forEach((item, index) => {
           const opt = document.createElement('option');
           opt.value = item.hojaName;
           opt.innerText = item.productoNombre;
           selectVerif.appendChild(opt);
 
+          // Pestañas de la tienda
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.onclick = function() { cambiarSorteo(item.hojaName); };
@@ -309,6 +608,7 @@
 
           if (index === 0) {
             sorteoActivo = item.hojaName;
+            hojaVisualizadaEnTabla = item.hojaName;
             btn.className = "tab-sorteo flex-1 py-3 px-4 rounded-2xl font-black text-xs md:text-sm uppercase transition border border-yellow-500 bg-yellow-500 text-black shadow-lg";
           } else {
             btn.className = "tab-sorteo flex-1 py-3 px-4 rounded-2xl font-black text-xs md:text-sm uppercase transition border border-gray-800 bg-gray-900 text-gray-400 hover:text-white";
@@ -316,22 +616,73 @@
 
           btn.innerText = item.etiquetaBoton;
           contTabs.appendChild(btn);
+
+          // Pestañas del visor Google Sheets
+          const tabSheet = document.createElement('button');
+          tabSheet.type = 'button';
+          tabSheet.onclick = function() { renderizarVisorSpreadsheet(item.hojaName); };
+          tabSheet.id = 'tabSheet_' + item.hojaName.replace(/\s+/g, '');
+          tabSheet.innerText = item.hojaName;
+          tabSheet.className = index === 0 
+            ? "px-3 py-1 rounded-lg font-bold bg-emerald-600 text-white border border-emerald-400"
+            : "px-3 py-1 rounded-lg font-bold bg-gray-800 text-gray-400 hover:text-white border border-gray-700";
+          tabsSpreadsheet.appendChild(tabSheet);
         });
 
         cargarInfoSorteo(sorteoActivo);
+        renderizarVisorSpreadsheet(hojaVisualizadaEnTabla);
       }).getListaSorteos();
     };
 
-    function abrirNavegadorExternoManualmente() {
-      var urlActual = window.location.href;
-      var isAndroid = /Android/i.test(navigator.userAgent);
+    function renderizarVisorSpreadsheet(hoja) {
+      hojaVisualizadaEnTabla = hoja;
 
-      if (isAndroid) {
-        var rawUrl = urlActual.replace(/^https?:\/\//, '');
-        window.location.href = "intent://" + rawUrl + "#Intent;scheme=https;package=com.android.chrome;end";
-      } else {
-        window.open(urlActual, '_blank');
+      // Actualizar pestañas activas del visor
+      document.querySelectorAll('#tabsSpreadsheet button').forEach(b => {
+        b.className = "px-3 py-1 rounded-lg font-bold bg-gray-800 text-gray-400 hover:text-white border border-gray-700";
+      });
+      const tabActivo = document.getElementById('tabSheet_' + hoja.replace(/\s+/g, ''));
+      if (tabActivo) {
+        tabActivo.className = "px-3 py-1 rounded-lg font-bold bg-emerald-600 text-white border border-emerald-400 shadow";
       }
+
+      const db = JSON.parse(localStorage.getItem('gas_sorteos_data') || '{}');
+      const s = db[hoja];
+      if (!s) return;
+
+      const vendidas = s.boletas.filter(b => b.comprador && b.comprador.trim() !== "").length;
+      const disponibles = s.boletas.length - vendidas;
+
+      document.getElementById('statTotal').innerText = s.boletas.length;
+      document.getElementById('statVendidas').innerText = vendidas;
+      document.getElementById('statDisponibles').innerText = disponibles;
+      document.getElementById('statPrecio').innerText = '$' + s.precioBoleta;
+
+      const cuerpo = document.getElementById('cuerpoTablaSheets');
+      cuerpo.innerHTML = '';
+
+      s.boletas.forEach((b, idx) => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-gray-900/60 transition";
+        
+        let statusBadge = `<span class="text-gray-500 font-medium">DISPONIBLE</span>`;
+        if (b.comprador) {
+          statusBadge = b.estado === 'PAGADO' 
+            ? `<span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded text-[10px] font-bold">PAGADO</span>`
+            : `<span class="bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded text-[10px] font-bold">PENDIENTE</span>`;
+        }
+
+        tr.innerHTML = `
+          <td class="p-2 border-r border-gray-800 text-center text-gray-500">${idx + 2}</td>
+          <td class="p-2 border-r border-gray-800 font-bold text-yellow-400">${b.numero}</td>
+          <td class="p-2 border-r border-gray-800 text-white">${b.comprador || '<span class="text-gray-600 italic">- vacía -</span>'}</td>
+          <td class="p-2 border-r border-gray-800 text-gray-300">${b.telefono || '-'}</td>
+          <td class="p-2 border-r border-gray-800 text-center">${statusBadge}</td>
+          <td class="p-2 border-r border-gray-800 text-gray-400">${b.tipoPago || '-'}</td>
+          <td class="p-2 text-gray-400 truncate max-w-[120px]">${b.email || '-'}</td>
+        `;
+        cuerpo.appendChild(tr);
+      });
     }
 
     function cambiarSorteo(hoja) {
@@ -382,11 +733,11 @@
 
       const listaOpciones = [
         { cant: min, desc: 0 },
-        { cant: min * 2, desc: 0 },
-        { cant: min * 3, desc: 0 },
-        { cant: Math.max(10, min * 5), desc: 5 },
-        { cant: Math.max(20, min * 10), desc: 7 },
-        { cant: Math.max(50, min * 25), desc: 10 }
+        { cant: min + 2, desc: 0 },
+        { cant: min + 4, desc: 0 },
+        { cant: Math.max(10, min + 5), desc: 5 },
+        { cant: Math.max(20, min + 10), desc: 7 },
+        { cant: Math.max(50, min + 25), desc: 10 }
       ];
 
       const opcionesUnicas = [];
@@ -406,11 +757,11 @@
 
         let descHtml = '';
         if (o.desc > 0) {
-          btn.className = 'btn-opcion relative border border-green-500/40 bg-green-950/20 p-2.5 rounded-xl text-center';
+          btn.className = 'btn-opcion relative border border-green-500/40 bg-green-950/20 p-2.5 rounded-xl text-center transition hover:border-green-400';
           descHtml = `<span class="absolute -top-2 -right-1 bg-green-500 text-black text-[9px] px-1.5 font-black rounded-full">${o.desc}% OFF</span>
                       <div class="font-bold text-sm text-green-400">${o.cant} Boletas</div>`;
         } else {
-          btn.className = 'btn-opcion border border-gray-800 bg-gray-950 p-2.5 rounded-xl text-center';
+          btn.className = 'btn-opcion border border-gray-800 bg-gray-950 p-2.5 rounded-xl text-center transition hover:border-yellow-500/50';
           descHtml = `<div class="font-bold text-sm text-white">${o.cant} Boleta${o.cant > 1 ? 's' : ''}</div>`;
         }
 
@@ -453,13 +804,21 @@
 
       const numCuenta = BANCOS_INFO[bancoSeleccionado].cuenta;
 
-      navigator.clipboard.writeText(numCuenta).then(() => {
+      // Usar execCommand con fallback seguro para iframes
+      const tempInput = document.createElement("input");
+      tempInput.value = numCuenta;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand('copy');
         const btn = document.getElementById('btnCopiarCuenta');
         btn.innerHTML = `<span>✓ ¡Copiado!</span>`;
         btn.className = "bg-green-500 text-black font-black px-3 py-1 rounded-lg transition text-[11px] flex items-center gap-1 shadow-md";
-      }).catch(err => {
-        alert("Número de cuenta: " + numCuenta);
-      });
+        mostrarNotificacion("Número de cuenta copiado: " + numCuenta, "success");
+      } catch (err) {
+        mostrarNotificacion("Número de cuenta: " + numCuenta, "info");
+      }
+      document.body.removeChild(tempInput);
     }
 
     function seleccionarOpcion(cant) {
@@ -521,17 +880,17 @@
       const hojaBusqueda = document.getElementById('selectSorteoVerificador').value;
 
       if (!q) {
-        alert("Por favor ingresa un número de boleto o teléfono.");
+        mostrarNotificacion("Por favor ingresa un número de boleto o teléfono.", "error");
         return;
       }
 
       const resBox = document.getElementById('resultadoBusqueda');
       resBox.classList.remove('hidden');
-      resBox.innerHTML = '<p class="text-xs text-gray-400 text-center">Buscando...</p>';
+      resBox.innerHTML = '<p class="text-xs text-gray-400 text-center py-2">🔍 Consultando hoja en tiempo real...</p>';
 
       google.script.run.withSuccessHandler(function(res) {
         if (!res.exito || res.resultados.length === 0) {
-          resBox.innerHTML = '<p class="text-xs text-red-400 text-center">No se encontraron boletos asociados a la búsqueda.</p>';
+          resBox.innerHTML = '<p class="text-xs text-red-400 text-center py-2">No se encontraron boletos asociados a la búsqueda.</p>';
           return;
         }
 
@@ -576,42 +935,42 @@
       const fileInput = document.getElementById('voucherFile');
 
       if (!nombre) {
-        alert("Por favor ingresa tu Nombre Completo.");
+        mostrarNotificacion("Por favor ingresa tu Nombre Completo.", "error");
         document.getElementById('nombre').focus();
         return;
       }
 
       if (!telefono) {
-        alert("Por favor ingresa tu número de Teléfono / WhatsApp.");
+        mostrarNotificacion("Por favor ingresa tu número de Teléfono / WhatsApp.", "error");
         document.getElementById('telefono').focus();
         return;
       }
 
       if (!email) {
-        alert("Por favor ingresa tu Correo Electrónico.");
+        mostrarNotificacion("Por favor ingresa tu Correo Electrónico.", "error");
         document.getElementById('email').focus();
         return;
       }
 
       if (!bancoSeleccionado) {
-        alert("Debes seleccionar obligatoriamente un banco para realizar la transferencia.");
+        mostrarNotificacion("Debes seleccionar un banco para transferir.", "error");
         document.getElementById('msgBancoReq').classList.remove('hidden');
         return;
       }
 
       if (cantidadSeleccionada < minimoCompraGlobal) {
-        alert("La cantidad mínima requerida de boletas para comprar es: " + minimoCompraGlobal);
+        mostrarNotificacion("La cantidad mínima es: " + minimoCompraGlobal, "error");
         return;
       }
 
       if (fileInput.files.length === 0) {
-        alert("Por favor adjunta el comprobante de pago (voucher).");
+        mostrarNotificacion("Por favor adjunta el comprobante de pago (voucher).", "error");
         return;
       }
 
       const btn = document.getElementById('btnSubmit');
       btn.disabled = true;
-      btn.innerHTML = `<span>PROCESANDO...</span>`;
+      btn.innerHTML = `<span>PROCESANDO EN SPREADSHEET...</span>`;
 
       const file = fileInput.files[0];
       const reader = new FileReader();
@@ -670,8 +1029,13 @@
         document.getElementById('cardInfoBanco').classList.add('hidden');
         document.querySelectorAll('.btn-banco').forEach(b => b.classList.remove('ring-2', 'ring-yellow-400', 'border-yellow-400'));
         seleccionarOpcion(minimoCompraGlobal);
+        mostrarNotificacion("¡Compra registrada y boletas generadas con éxito!", "success");
+
+        // Actualizar automáticamente tanto los gráficos de sorteo como el inspector de Google Sheets
+        cargarInfoSorteo(sorteoActivo);
+        renderizarVisorSpreadsheet(hojaVisualizadaEnTabla);
       } else {
-        alert("Error: " + res.mensaje);
+        mostrarNotificacion("Error: " + res.mensaje, "error");
       }
     }
 
@@ -685,26 +1049,34 @@
       });
       texto += "\n¡Mucha suerte! 🍀";
 
-      navigator.clipboard.writeText(texto).then(() => {
+      const tempInput = document.createElement("textarea");
+      tempInput.value = texto;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand('copy');
         const btn = document.getElementById('btnCopiarWsp');
         btn.innerHTML = `<span>✓ ¡LISTA DE BOLETAS COPIADA!</span>`;
         btn.className = "w-full bg-green-500 text-black py-3 rounded-xl font-black transition flex items-center justify-center gap-2 text-sm shadow-md uppercase";
-      }).catch(err => {
-        alert("Toma una captura de pantalla de tus números asignados.");
-      });
+        mostrarNotificacion("Boletas copiadas para enviar por WhatsApp", "success");
+      } catch (err) {
+        mostrarNotificacion("Por favor toma una captura de pantalla.", "info");
+      }
+      document.body.removeChild(tempInput);
     }
 
     function onFailure(err) {
       const btn = document.getElementById('btnSubmit');
       btn.disabled = false;
       btn.innerHTML = `<span>PROCESAR COMPRA</span>`;
-      alert("Ocurrió un error inesperado: " + err.message);
+      mostrarNotificacion("Ocurrió un error inesperado: " + err.message, "error");
     }
 
     function cerrarModalResultado() {
       document.getElementById('modalResultado').classList.add('hidden');
       document.getElementById('modalResultado').classList.remove('flex');
       cargarInfoSorteo(sorteoActivo);
+      renderizarVisorSpreadsheet(hojaVisualizadaEnTabla);
     }
   </script>
 </body>
