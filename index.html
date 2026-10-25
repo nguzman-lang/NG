@@ -2,21 +2,19 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>NG SUEÑA Y GANA</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NG SUEÑA Y GANA</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-950 text-gray-100 min-h-screen py-6 px-4 font-sans selection:bg-yellow-500 selection:text-black">
+<body class="bg-gray-950 text-gray-100 min-h-screen py-6 px-4 font-sans antialiased selection:bg-yellow-500 selection:text-black">
 
   <div class="max-w-3xl mx-auto space-y-6">
 
-    <div id="avisoPendiente" hidden class="p-4 border border-yellow-500 rounded-xl">
-      Compra pendiente de confirmar. No hagas otra transferencia. <span id="idPendiente"></span>
-      <button type="button" onclick="ejecutarCompra()" class="bg-yellow-500 text-black p-2 rounded-lg">Recuperar / reintentar la misma compra</button>
-    </div>
     <!-- Encabezado Principal con Logo -->
-    <header class="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border border-yellow-500/30 rounded-3xl p-6 shadow-2xl text-center relative overflow-hidden flex flex-col items-center justify-center gap-3">
-      <img id="logoPagina" src="https://lh3.googleusercontent.com/d/1LDeeV_wCB-tN2s_XuVIXEwbYKEgQjQ8e" alt="NG SUEÑA Y GANA" class="h-20 md:h-24 object-contain rounded-2xl shadow-lg border border-yellow-500/30">
+    <div class="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border border-yellow-500/30 rounded-3xl p-6 shadow-2xl text-center relative overflow-hidden flex flex-col items-center justify-center gap-3">
+      <img id="logoPagina" src="https://lh3.googleusercontent.com/d/1LDeeV_wCB-tN2s_XuVIXEwbYKEgQjQ8e" alt="NG SUEÑA Y GANA" 
+           onerror="this.onerror=null; this.src='https://placehold.co/240x100/18181b/eab308?text=NG+SUE%C3%91A+Y+GANA';"
+           class="h-20 md:h-24 object-contain rounded-2xl shadow-lg border border-yellow-500/30">
       
       <h1 class="text-3xl md:text-5xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 uppercase">
         NG SUEÑA Y GANA
@@ -24,37 +22,36 @@
       <p class="text-gray-400 text-xs md:text-sm font-medium">
         ¡Selecciona tus boletas, realiza tu transferencia y gana!
       </p>
-    </header>
+    </div>
 
-    <!-- Cuadro Informativo de la Lotería -->
-    <section class="bg-gradient-to-r from-yellow-500/10 via-amber-500/15 to-yellow-500/10 border border-yellow-500/40 rounded-2xl p-4 text-center shadow-lg">
+    <!-- CUADRO INDEPENDIENTE DE LA LOTERÍA -->
+    <div class="bg-gradient-to-r from-yellow-500/10 via-amber-500/15 to-yellow-500/10 border border-yellow-500/40 rounded-2xl p-4 text-center shadow-lg">
       <p class="text-xs md:text-sm font-extrabold text-yellow-300 flex items-center justify-center gap-2">
         <span>🇩🇴</span>
         <span>Rifa jugada con el 1.ᵉʳ y 2.º premio de la Lotería Nacional Dominicana noche (4 dígitos).</span>
       </p>
-    </section>
+    </div>
 
-    <!-- Pestañas dinámicas de sorteo -->
-    <nav id="contenedorTabs" class="flex flex-col sm:flex-row justify-center gap-3">
-      <div id="statusCargaSorteos" class="w-full text-center py-2 text-xs text-yellow-400 font-bold animate-pulse">
-        Conectando con Google Sheets...
-      </div>
-    </nav>
+    <!-- BOTONES DINÁMICOS DE PESTAÑAS DE SORTEO -->
+    <div id="contenedorTabs" class="flex flex-col sm:flex-row justify-center gap-3">
+    </div>
 
-    <!-- Tarjeta del Producto & Barra de Progreso -->
-    <main class="bg-gray-900/90 border border-gray-800 rounded-3xl overflow-hidden shadow-2xl">
+    <!-- TARJETA DEL PRODUCTO & BARRA DE PROGRESO -->
+    <div class="bg-gray-900/90 border border-gray-800 rounded-3xl overflow-hidden shadow-2xl">
       <div class="relative w-full h-72 md:h-96 bg-gray-950 flex items-center justify-center overflow-hidden border-b border-gray-800">
-        <img id="imgProducto" src="https://i.postimg.cc/m220R766/nintendo-switch-pack.jpg" alt="Producto Rifa" class="w-full h-full object-cover transition-opacity duration-300">
+        <img id="imgProducto" src="https://i.postimg.cc/m220R766/nintendo-switch-pack.jpg" alt="Producto Rifa" 
+             onerror="this.onerror=null; this.src='https://placehold.co/800x600/18181b/eab308?text=Premio+Sorteo';"
+             class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent"></div>
-        <div class="absolute top-4 right-4 bg-yellow-500 text-black text-xs font-black px-3 py-1.5 rounded-full shadow-lg uppercase tracking-wider">
+        <div class="absolute top-4 right-4 bg-yellow-500 text-black text-xs font-black px-3 py-1.5 rounded-full shadow-lg uppercase">
           En Juego 🔥
         </div>
       </div>
 
       <div class="p-6 md:p-8 space-y-6">
         <div>
-          <h2 id="txtProductoNombre" class="text-2xl md:text-3xl font-black text-white">Cargando Sorteo...</h2>
-          <p id="txtProductoDesc" class="text-gray-400 text-sm mt-2 leading-relaxed">Obteniendo información del sorteo...</p>
+          <h2 id="txtProductoNombre" class="text-2xl md:text-3xl font-black text-white">Cargando Producto...</h2>
+          <p id="txtProductoDesc" class="text-gray-400 text-sm mt-2 leading-relaxed">Cargando descripción...</p>
         </div>
 
         <div class="bg-gray-950 p-4 rounded-2xl border border-gray-800 space-y-3">
@@ -77,18 +74,18 @@
           </div>
         </div>
 
-        <button onclick="abrirModalCompra()" class="w-full bg-gradient-to-r from-yellow-500 via-amber-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-black font-black py-4 rounded-2xl text-lg shadow-xl shadow-yellow-500/10 transition transform active:scale-95 flex justify-center items-center gap-2 uppercase tracking-wider cursor-pointer">
+        <button onclick="abrirModalCompra()" class="w-full bg-gradient-to-r from-yellow-500 via-amber-500 to-yellow-600 hover:from-yellow-400 hover:to-yellow-500 text-black font-black py-4 rounded-2xl text-lg shadow-xl shadow-yellow-500/10 transition transform active:scale-95 flex justify-center items-center gap-2 uppercase tracking-wider">
           <span>🎮 JUGAR Y COMPRAR BOLETAS</span>
         </button>
       </div>
-    </main>
+    </div>
 
-    <!-- Verificador de Boletos (4 Dígitos) -->
-    <section class="bg-gray-900/90 border border-gray-800 rounded-3xl p-6 shadow-xl space-y-4">
+    <!-- VERIFICADOR DE BOLETOS -->
+    <div class="bg-gray-900/90 border border-gray-800 rounded-3xl p-6 shadow-xl space-y-4">
       <h3 class="text-lg font-extrabold text-yellow-400 flex items-center gap-2">
         🔍 VERIFICADOR DE BOLETOS (4 DÍGITOS)
       </h3>
-      <p class="text-xs text-gray-400">Selecciona el producto en el que estás participando e ingresa tu número (ej. <strong>0200</strong>) .</p>
+      <p class="text-xs text-gray-400">Selecciona el producto en el que estás participando e ingresa tu boleto (ej. <strong>0200</strong>) o teléfono.</p>
       
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
         <select id="selectSorteoVerificador" class="bg-gray-950 border border-gray-800 rounded-xl px-3 py-3 text-white focus:border-yellow-500 focus:outline-none text-xs font-bold truncate">
@@ -97,13 +94,13 @@
         <input type="text" id="inputBuscar" placeholder="Ej. 0200 o tu teléfono" class="sm:col-span-2 bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:border-yellow-500 focus:outline-none text-xs">
       </div>
 
-      <button onclick="buscarBoleto()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-extrabold py-3 rounded-xl transition uppercase text-sm cursor-pointer shadow-md">
+      <button onclick="buscarBoleto()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-extrabold py-3 rounded-xl transition uppercase text-sm">
         Buscar Boleto
       </button>
 
       <div id="resultadoBusqueda" class="hidden bg-gray-950 p-4 rounded-2xl border border-gray-800 space-y-2">
       </div>
-    </section>
+    </div>
 
   </div>
 
@@ -111,7 +108,7 @@
   <div id="modalCompra" class="fixed inset-0 bg-black/85 backdrop-blur-md hidden items-center justify-center p-3 md:p-6 z-50 overflow-y-auto">
     <div class="bg-gray-900 border border-yellow-500/30 rounded-3xl p-5 md:p-7 max-w-xl w-full space-y-5 shadow-2xl relative my-auto max-h-[95vh] overflow-y-auto">
       
-      <button type="button" onclick="cerrarModalCompra()" class="sticky top-0 float-right bg-gray-800 text-gray-300 hover:bg-red-600 hover:text-white w-9 h-9 rounded-full font-bold flex items-center justify-center transition shadow-lg z-50 cursor-pointer">
+      <button type="button" onclick="cerrarModalCompra()" class="sticky top-0 float-right bg-gray-800 text-gray-300 hover:bg-red-600 hover:text-white w-9 h-9 rounded-full font-bold flex items-center justify-center transition shadow-lg z-50">
         ✕
       </button>
 
@@ -125,7 +122,6 @@
 
       <form id="compraForm" onsubmit="enviarFormulario(event)" class="space-y-5">
         
-        <!-- Cantidad de boletas -->
         <div>
           <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">1. Selecciona la Cantidad de Boletas *</label>
           <div id="contenedorPaquetes" class="grid grid-cols-3 gap-2"></div>
@@ -136,7 +132,6 @@
           </div>
         </div>
 
-        <!-- Datos personales -->
         <div class="space-y-3 pt-2 border-t border-gray-800">
           <label class="block text-xs font-semibold uppercase text-gray-400">2. Tus Datos Personales *</label>
           <div>
@@ -150,28 +145,35 @@
           </div>
         </div>
 
-        <!-- Selector de Banco -->
         <div class="space-y-3 pt-2 border-t border-gray-800">
           <label class="block text-xs font-semibold uppercase text-gray-400">3. Selecciona tu Banco para Transferir * <span id="msgBancoReq" class="text-red-400 text-[10px] hidden">(Obligatorio)</span></label>
           
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            <button type="button" onclick="seleccionarBanco('Banco Popular')" class="btn-banco border border-gray-800 bg-gray-950 p-2.5 rounded-2xl flex flex-col items-center justify-center gap-1.5 hover:border-yellow-500 transition cursor-pointer" data-banco="Banco Popular">
-              <img src="https://lh3.googleusercontent.com/d/1t8dCzrgISFiFqldumf8GhzJY0PxQvAJK" alt="Popular" class="w-8 h-8 object-contain">
+            <button type="button" onclick="seleccionarBanco('Banco Popular')" class="btn-banco border border-gray-800 bg-gray-950 p-2.5 rounded-2xl flex flex-col items-center justify-center gap-1.5 hover:border-yellow-500 transition" data-banco="Banco Popular">
+              <img src="https://lh3.googleusercontent.com/d/1t8dCzrgISFiFqldumf8GhzJY0PxQvAJK" alt="Popular" 
+                   onerror="this.onerror=null; this.src='https://placehold.co/40x40/003882/ffffff?text=BPD';"
+                   class="w-8 h-8 object-contain">
               <span class="text-[11px] font-bold text-white">Popular</span>
             </button>
 
-            <button type="button" onclick="seleccionarBanco('BHD')" class="btn-banco border border-gray-800 bg-gray-950 p-2.5 rounded-2xl flex flex-col items-center justify-center gap-1.5 hover:border-yellow-500 transition cursor-pointer" data-banco="BHD">
-              <img src="https://lh3.googleusercontent.com/d/1ykBk04fq7Yq2joVj-N7ZpZtbNR4vGU3E" alt="BHD" class="w-8 h-8 object-contain">
+            <button type="button" onclick="seleccionarBanco('BHD')" class="btn-banco border border-gray-800 bg-gray-950 p-2.5 rounded-2xl flex flex-col items-center justify-center gap-1.5 hover:border-yellow-500 transition" data-banco="BHD">
+              <img src="https://lh3.googleusercontent.com/d/1ykBk04fq7Yq2joVj-N7ZpZtbNR4vGU3E" alt="BHD" 
+                   onerror="this.onerror=null; this.src='https://placehold.co/40x40/007a3d/ffffff?text=BHD';"
+                   class="w-8 h-8 object-contain">
               <span class="text-[11px] font-bold text-white">BHD</span>
             </button>
 
-            <button type="button" onclick="seleccionarBanco('APAP')" class="btn-banco border border-gray-800 bg-gray-950 p-2.5 rounded-2xl flex flex-col items-center justify-center gap-1.5 hover:border-yellow-500 transition cursor-pointer" data-banco="APAP">
-              <img src="https://lh3.googleusercontent.com/d/1WiXqhpBxtOfFjNSRKE5LpxSYd3TZl3T0" alt="APAP" class="w-8 h-8 object-contain">
+            <button type="button" onclick="seleccionarBanco('APAP')" class="btn-banco border border-gray-800 bg-gray-950 p-2.5 rounded-2xl flex flex-col items-center justify-center gap-1.5 hover:border-yellow-500 transition" data-banco="APAP">
+              <img src="https://lh3.googleusercontent.com/d/1WiXqhpBxtOfFjNSRKE5LpxSYd3TZl3T0" alt="APAP" 
+                   onerror="this.onerror=null; this.src='https://placehold.co/40x40/dc2626/ffffff?text=APAP';"
+                   class="w-8 h-8 object-contain">
               <span class="text-[11px] font-bold text-white">APAP</span>
             </button>
 
-            <button type="button" onclick="seleccionarBanco('Qik')" class="btn-banco border border-gray-800 bg-gray-950 p-2.5 rounded-2xl flex flex-col items-center justify-center gap-1.5 hover:border-yellow-500 transition cursor-pointer" data-banco="Qik">
-              <img src="https://lh3.googleusercontent.com/d/1xY7KaKZ8fgHHcR6pIp3ZO-Wy8ZrdtQu8" alt="Qik" class="w-8 h-8 object-contain">
+            <button type="button" onclick="seleccionarBanco('Qik')" class="btn-banco border border-gray-800 bg-gray-950 p-2.5 rounded-2xl flex flex-col items-center justify-center gap-1.5 hover:border-yellow-500 transition" data-banco="Qik">
+              <img src="https://lh3.googleusercontent.com/d/1xY7KaKZ8fgHHcR6pIp3ZO-Wy8ZrdtQu8" alt="Qik" 
+                   onerror="this.onerror=null; this.src='https://placehold.co/40x40/6d28d9/ffffff?text=Qik';"
+                   class="w-8 h-8 object-contain">
               <span class="text-[11px] font-bold text-white">Qik</span>
             </button>
           </div>
@@ -184,7 +186,7 @@
                 <span class="text-gray-400 block text-[10px]">Número de Cuenta:</span>
                 <strong id="lblCuenta" class="text-white font-mono text-sm tracking-wider">857506661</strong>
               </div>
-              <button type="button" onclick="copiarCuentaBancaria()" id="btnCopiarCuenta" class="bg-yellow-500/20 hover:bg-yellow-500 border border-yellow-500 text-yellow-400 hover:text-black font-bold px-3 py-1 rounded-lg transition text-[11px] flex items-center gap-1 cursor-pointer">
+              <button type="button" onclick="copiarCuentaBancaria()" id="btnCopiarCuenta" class="bg-yellow-500/20 hover:bg-yellow-500 border border-yellow-500 text-yellow-400 hover:text-black font-bold px-3 py-1 rounded-lg transition text-[11px] flex items-center gap-1">
                 <span>📋 Copiar Cuenta</span>
               </button>
             </div>
@@ -195,7 +197,6 @@
           </div>
         </div>
 
-        <!-- Resumen de Costo -->
         <div class="bg-gray-950 p-3.5 rounded-xl border border-gray-800 space-y-1 text-xs">
           <div class="flex justify-between text-gray-400">
             <span>Descuento aplicado:</span>
@@ -207,13 +208,12 @@
           </div>
         </div>
 
-        <!-- Subida del Voucher -->
         <div>
           <label class="block text-xs font-semibold uppercase text-gray-400 mb-1">Adjuntar Comprobante de Pago (Voucher) *</label>
-          <input type="file" id="voucherFile" accept="image/jpeg,image/png,image/webp,application/pdf" required class="w-full text-xs text-gray-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-yellow-500 file:text-black hover:file:bg-yellow-400 cursor-pointer">
+          <input type="file" id="voucherFile" accept="image/*,application/pdf" required class="w-full text-xs text-gray-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-yellow-500 file:text-black hover:file:bg-yellow-400 cursor-pointer">
         </div>
 
-        <button type="submit" id="btnSubmit" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-3.5 rounded-xl text-base shadow-lg transition uppercase tracking-wider cursor-pointer">
+        <button type="submit" id="btnSubmit" class="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-black py-3.5 rounded-xl text-base shadow-lg transition uppercase tracking-wider">
           PROCESAR COMPRA
         </button>
 
@@ -221,32 +221,126 @@
     </div>
   </div>
 
-  <!-- MODAL DE RESULTADOS -->
+  <!-- MODAL RESULTADOS -->
   <div id="modalResultado" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
     <div class="bg-gray-900 border border-yellow-500/40 rounded-3xl p-6 max-w-md w-full text-center space-y-4 shadow-2xl">
       <div class="w-16 h-16 bg-yellow-500/20 border border-yellow-500 text-yellow-400 rounded-full flex items-center justify-center mx-auto text-3xl font-black">✓</div>
       <h2 class="text-2xl font-black text-white uppercase">¡Compra Registrada!</h2>
       <p class="text-xs text-gray-400">Tus números asignados de 4 dígitos para la Lotería Nacional son:</p>
       
-      <p id="detalleRecibo" class="text-xs text-gray-300 break-words"></p>
       <div id="listaNumeros" class="flex flex-wrap justify-center gap-2 max-h-48 overflow-y-auto p-3 bg-gray-950 rounded-2xl border border-gray-800 font-mono">
       </div>
 
-      <button type="button" onclick="copiarNumerosWhatsapp()" id="btnCopiarWsp" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-xl font-bold transition flex items-center justify-center gap-2 text-sm shadow-md uppercase cursor-pointer">
+      <button type="button" onclick="copiarNumerosWhatsapp()" id="btnCopiarWsp" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-xl font-bold transition flex items-center justify-center gap-2 text-sm shadow-md uppercase">
         <span>📋 COPIAR NÚMERO DE BOLETAS</span>
       </button>
 
-      <button onclick="cerrarModalResultado()" class="w-full bg-gray-800 text-gray-300 py-2.5 rounded-xl font-bold hover:bg-gray-700 transition uppercase text-xs cursor-pointer">
+      <button onclick="cerrarModalResultado()" class="w-full bg-gray-800 text-gray-300 py-2.5 rounded-xl font-bold hover:bg-gray-700 transition uppercase text-xs">
         Entendido / Cerrar
       </button>
     </div>
   </div>
 
-  <!-- SCRIPT CONECTOR CLIENTE -->
-  <script>
-    // URL activa de tu Web App en Google Apps Script
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwSgLmjJKwdKAwbvAy7ntCQLmiZmEx__hGXwHTJRjZzB7hw4Ywa8VXC3QIKa6JbNxRSwA/exec";
+  <!-- Contenedor flotante de notificación amigable (reemplazo sin alertas) -->
+  <div id="toastNotification" class="fixed bottom-5 right-5 z-50 transform translate-y-24 opacity-0 transition-all duration-300 bg-gray-900 border border-yellow-500 text-yellow-300 text-xs px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3">
+    <span id="toastIcon">ℹ️</span>
+    <span id="toastMessage" class="font-medium">Mensaje informativo</span>
+  </div>
 
+  <!-- CONEXIÓN REAL CON GOOGLE APPS SCRIPT / GITHUB PAGES BRIDGE -->
+  <script>
+    // URL de tu Google Apps Script desplegado como Web App con acceso público (Anyone)
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3Cg8BEjyjtM4VMF_j6KkPR15Zy0VoqCcWgSrjbjj5V_rk16h4-YQMYWV_-IgF-4FH3w/exec";
+
+    // Sistema de notificaciones no intrusivas
+    function mostrarNotificacion(msg, tipo = "info") {
+      const toast = document.getElementById('toastNotification');
+      const toastMsg = document.getElementById('toastMessage');
+      const toastIcon = document.getElementById('toastIcon');
+
+      toastMsg.innerText = msg;
+      toastIcon.innerText = tipo === "error" ? "⚠️" : (tipo === "success" ? "✅" : "🔔");
+
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 3500);
+    }
+
+    /**
+     * Capa de comunicación remota para GitHub Pages:
+     * Si corre en GitHub Pages se comunica mediante fetch() a tu Apps Script.
+     * Si corre dentro de Google Apps Script usa el nativo google.script.run.
+     */
+    const apiBridge = {
+      async getListaSorteos() {
+        if (typeof google !== 'undefined' && google.script && google.script.run) {
+          return new Promise((resolve, reject) => {
+            google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).getListaSorteos();
+          });
+        }
+        try {
+          const res = await fetch(`${APPS_SCRIPT_URL}?action=getListaSorteos`);
+          if (!res.ok) throw new Error("Respuesta HTTP " + res.status);
+          return await res.json();
+        } catch (e) {
+          throw new Error("No se pudo leer la lista real de sorteos. " + e.message);
+        }
+      },
+
+      async getInfoRifa(nombreHoja) {
+        if (typeof google !== 'undefined' && google.script && google.script.run) {
+          return new Promise((resolve, reject) => {
+            google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).getInfoRifa(nombreHoja);
+          });
+        }
+        try {
+          const res = await fetch(`${APPS_SCRIPT_URL}?action=getInfoRifa&hoja=${encodeURIComponent(nombreHoja)}`);
+          if (!res.ok) throw new Error("Respuesta HTTP " + res.status);
+          return await res.json();
+        } catch (e) {
+          throw new Error("No se pudo leer el precio y mínimo reales del sorteo. " + e.message);
+        }
+      },
+
+      async verificarBoleto(consulta, nombreHoja) {
+        if (typeof google !== 'undefined' && google.script && google.script.run) {
+          return new Promise((resolve, reject) => {
+            google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).verificarBoleto(consulta, nombreHoja);
+          });
+        }
+        try {
+          const res = await fetch(`${APPS_SCRIPT_URL}?action=verificarBoleto&q=${encodeURIComponent(consulta)}&hoja=${encodeURIComponent(nombreHoja)}`);
+          if (!res.ok) throw new Error("Respuesta HTTP " + res.status);
+          return await res.json();
+        } catch (e) {
+          return { exito: false, mensaje: "No se pudo consultar el servidor remoto de Google Sheets." };
+        }
+      },
+
+      async procesarCompra(payload) {
+        if (typeof google !== 'undefined' && google.script && google.script.run) {
+          return new Promise((resolve, reject) => {
+            google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).procesarCompra(payload);
+          });
+        }
+
+        const res = await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error("No se pudo confirmar la compra (HTTP " + res.status + ").");
+        return await res.json();
+      }
+    };
+  </script>
+
+  <!-- LÓGICA PRINCIPAL DE LA VISTA Y COMPORTAMIENTO -->
+  <script>
     const BANCOS_INFO = {
       "Banco Popular": { cuenta: "857506661", tipo: "Cuenta Corriente", cedula: "402-2523002-4", titular: "Nathanael Guzman" },
       "BHD": { cuenta: "24668100037", tipo: "Cuenta de Ahorro", cedula: "402-2523002-4", titular: "Nathanael Guzman" },
@@ -261,171 +355,165 @@
     let minimoCompraGlobal = 1;
     let ultimosNumerosObtenidos = [];
     let sorteoActivo = "Sorteo 1";
+    let infoSorteoLista = false;
+    let versionCargaSorteo = 0;
+    let compraEnCurso = false;
+    let compraEnviada = null;
 
-    /**
-     * Llamada anti-CORS mediante JSONP con Timeout controlado
-     */
-    let infoLista = false, enviando = false;
-    let compraPendiente = null;
-    try { compraPendiente = JSON.parse(sessionStorage.getItem('ngCompraPendiente') || 'null'); } catch (_) {}
-    function guardarPendiente() {
-      try { if(compraPendiente) sessionStorage.setItem('ngCompraPendiente',JSON.stringify(compraPendiente));
-      else sessionStorage.removeItem('ngCompraPendiente'); } catch (_) {}
-    }
-    function apiCallJSONP(action, params = {}) {
-      return new Promise((resolve,reject)=>{
-        if(!window.google || !google.script || !google.script.run) {
-          reject(new Error('Abre la aplicación de Apps Script.')); return;
+    function bloquearFormulario(bloquear) {
+      document.querySelectorAll('#compraForm input, #compraForm button').forEach(el => {
+        if (bloquear) {
+          el.dataset.disabledAnterior = el.disabled ? '1' : '0';
+          el.disabled = true;
+        } else {
+          el.disabled = el.dataset.disabledAnterior === '1';
+          delete el.dataset.disabledAnterior;
         }
-        const run=google.script.run.withSuccessHandler(resolve).withFailureHandler(reject);
-        if(action==='getListaSorteos') run.getListaSorteos();
-        else if(action==='getInfoRifa') run.getInfoRifa(params.hoja);
-        else if(action==='verificarBoleto') run.verificarBoleto(params.q,params.hoja);
       });
     }
-    function escapar(v) { const e=document.createElement('span');e.textContent=String(v);return e.innerHTML; }
 
-    // Inicialización al cargar la página
-    window.onload = function() {
-      if(!window.google || !google.script || !google.script.run) {
-        document.getElementById('contenedorTabs').textContent='Abriendo compra segura…';
-        window.location.replace(SCRIPT_URL); return;
-      }
-      if(compraPendiente) document.getElementById('avisoPendiente').hidden=false;
-      apiCallJSONP('getListaSorteos')
-        .then(lista => {
-          if (!Array.isArray(lista) || lista.length === 0) {
-            throw new Error('No hay hojas cuyo nombre comience con Sorteo.');
+    function escaparHTML(valor) {
+      const nodo = document.createElement('span');
+      nodo.textContent = String(valor == null ? '' : valor);
+      return nodo.innerHTML;
+    }
+
+    window.onload = async function() {
+      try {
+        const lista = await apiBridge.getListaSorteos();
+        if (!Array.isArray(lista) || !lista.length) throw new Error(lista.mensaje || "No hay sorteos disponibles.");
+        const selectVerif = document.getElementById('selectSorteoVerificador');
+        selectVerif.innerHTML = '';
+
+        const contTabs = document.getElementById('contenedorTabs');
+        contTabs.innerHTML = '';
+
+        lista.forEach((item, index) => {
+          const opt = document.createElement('option');
+          opt.value = item.hojaName;
+          opt.innerText = item.productoNombre;
+          selectVerif.appendChild(opt);
+
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.onclick = function() { cambiarSorteo(item.hojaName); };
+          btn.id = 'tab_' + item.hojaName.replace(/\s+/g, '');
+
+          if (index === 0) {
+            sorteoActivo = item.hojaName;
+            btn.className = "tab-sorteo flex-1 py-3 px-4 rounded-2xl font-black text-xs md:text-sm uppercase transition border border-yellow-500 bg-yellow-500 text-black shadow-lg";
+          } else {
+            btn.className = "tab-sorteo flex-1 py-3 px-4 rounded-2xl font-black text-xs md:text-sm uppercase transition border border-gray-800 bg-gray-900 text-gray-400 hover:text-white";
           }
 
-          const selectVerif = document.getElementById('selectSorteoVerificador');
-          selectVerif.innerHTML = '';
-
-          const contTabs = document.getElementById('contenedorTabs');
-          contTabs.innerHTML = '';
-
-          lista.forEach((item, index) => {
-            const opt = document.createElement('option');
-            opt.value = item.hojaName;
-            opt.innerText = item.productoNombre;
-            selectVerif.appendChild(opt);
-
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.onclick = function() { cambiarSorteo(item.hojaName); };
-            btn.id = 'tab_' + item.hojaName.replace(/\s+/g, '');
-
-            if (index === 0) {
-              sorteoActivo = item.hojaName;
-              btn.className = "tab-sorteo flex-1 py-3 px-4 rounded-2xl font-black text-xs md:text-sm uppercase transition border border-yellow-500 bg-yellow-500 text-black shadow-lg cursor-pointer";
-            } else {
-              btn.className = "tab-sorteo flex-1 py-3 px-4 rounded-2xl font-black text-xs md:text-sm uppercase transition border border-gray-800 bg-gray-900 text-gray-400 hover:text-white cursor-pointer";
-            }
-
-            btn.innerText = item.etiquetaBoton;
-            contTabs.appendChild(btn);
-          });
-
-          cargarInfoSorteo(sorteoActivo);
-        })
-        .catch(err => {
-          console.error(err);
-          document.getElementById('contenedorTabs').innerHTML = `
-            <div class="bg-red-500/10 border border-red-500/40 text-red-400 text-xs p-4 rounded-2xl text-center w-full space-y-2">
-              <p class="font-extrabold text-sm">⚠️ Conexión no disponible con Google Apps Script</p>
-              <p class="text-[11px] text-gray-300">Verifica que en <i>Gestionar implementaciones</i> el acceso sea <b>Cualquiera (Anyone)</b> con una <b>Nueva versión</b>.</p>
-            </div>
-          `;
+          btn.innerText = item.etiquetaBoton;
+          contTabs.appendChild(btn);
         });
+
+        cargarInfoSorteo(sorteoActivo);
+      } catch (err) {
+        mostrarNotificacion("Error cargando los sorteos desde Google Sheets", "error");
+      }
     };
 
     function cambiarSorteo(hoja) {
-      if(enviando || compraPendiente) { alert("Resuelve la compra pendiente antes de cambiar de sorteo."); return; }
+      if (compraEnCurso) return;
       sorteoActivo = hoja;
       
       document.querySelectorAll('.tab-sorteo').forEach(tab => {
-        tab.className = "tab-sorteo flex-1 py-3 px-4 rounded-2xl font-black text-xs md:text-sm uppercase transition border border-gray-800 bg-gray-900 text-gray-400 hover:text-white cursor-pointer";
+        tab.className = "tab-sorteo flex-1 py-3 px-4 rounded-2xl font-black text-xs md:text-sm uppercase transition border border-gray-800 bg-gray-900 text-gray-400 hover:text-white";
       });
 
       const btnActivo = document.getElementById('tab_' + hoja.replace(/\s+/g, ''));
       if (btnActivo) {
-        btnActivo.className = "tab-sorteo flex-1 py-3 px-4 rounded-2xl font-black text-xs md:text-sm uppercase transition border border-yellow-500 bg-yellow-500 text-black shadow-lg cursor-pointer";
+        btnActivo.className = "tab-sorteo flex-1 py-3 px-4 rounded-2xl font-black text-xs md:text-sm uppercase transition border border-yellow-500 bg-yellow-500 text-black shadow-lg";
       }
 
       document.getElementById('selectSorteoVerificador').value = hoja;
       cargarInfoSorteo(hoja);
     }
 
-    function cargarInfoSorteo(hoja) {
-      infoLista=false;
+    async function cargarInfoSorteo(hoja) {
+      if (compraEnCurso) return;
+      const version = ++versionCargaSorteo;
+      infoSorteoLista = false;
       document.getElementById('lblSorteoActivoModal').innerText = hoja;
 
-      apiCallJSONP('getInfoRifa', { hoja: hoja })
-        .then(info => {
-          if(hoja!==sorteoActivo) return;
-          infoLista=true;
-          document.getElementById("cantLibre").max=Math.min(1000,info.disponibles);
-          PRECIO_BASE = Number(info.precioBoleta) || 100;
-          minimoCompraGlobal = parseInt(info.minimoCompra, 10) || 1;
+      try {
+        const info = await apiBridge.getInfoRifa(hoja);
+        if (version !== versionCargaSorteo || hoja !== sorteoActivo) return;
+        if (!info || info.exito === false) throw new Error(info && info.mensaje || "Respuesta inválida.");
+        const precio = Number(info.precioBoleta);
+        const minimo = Number(info.minimoCompra);
+        if (!Number.isFinite(precio) || precio <= 0 || !Number.isSafeInteger(minimo) || minimo < 1) {
+          throw new Error("El precio o el mínimo del sorteo no es válido.");
+        }
+        PRECIO_BASE = precio;
+        minimoCompraGlobal = minimo;
+        document.getElementById('cantLibre').min = minimo;
+        document.getElementById('cantLibre').step = '1';
 
-          document.getElementById('txtProductoNombre').innerText = info.productoNombre || "Gran Sorteo";
-          document.getElementById('txtProductoDesc').innerText = info.productoDesc || "¡Participa ahora!";
-          document.getElementById('txtFechaSorteo').innerText = info.fechaSorteo || "Próximamente";
-          
-          const imgEl = document.getElementById('imgProducto');
-          if (info.productoImagen) imgEl.src = info.productoImagen;
+        document.getElementById('txtProductoNombre').innerText = info.productoNombre;
+        document.getElementById('txtProductoDesc').innerText = info.productoDesc;
+        document.getElementById('txtFechaSorteo').innerText = info.fechaSorteo;
+        
+        const imgEl = document.getElementById('imgProducto');
+        imgEl.src = info.productoImagen;
 
-          const pct = Math.min(100, Math.max(0, info.porcentajeProgreso || 0));
-          document.getElementById('txtProgresoPct').innerText = pct + '%';
-          document.getElementById('barProgreso').style.width = pct + '%';
-          
-          document.getElementById('lblMinimo').innerText = minimoCompraGlobal;
+        document.getElementById('txtProgresoPct').innerText = info.porcentajeProgreso + '%';
+        document.getElementById('barProgreso').style.width = info.porcentajeProgreso + '%';
+        
+        document.getElementById('lblMinimo').innerText = minimoCompraGlobal;
 
-          generarPaquetesDinamicos(minimoCompraGlobal);
-          seleccionarOpcion(minimoCompraGlobal);
-        })
-        .catch(err => { infoLista=false; alert("Error al cargar sorteo: "+err.message); });
+        generarPaquetesDinamicos(minimoCompraGlobal);
+
+        cantidadSeleccionada = minimoCompraGlobal;
+        seleccionarOpcion(cantidadSeleccionada);
+        infoSorteoLista = true;
+      } catch (err) {
+        if (version !== versionCargaSorteo) return;
+        infoSorteoLista = false;
+        mostrarNotificacion("Error obteniendo detalles del sorteo: " + err.message, "error");
+      }
     }
 
     function generarPaquetesDinamicos(min) {
+      min = Number(min);
       const cont = document.getElementById('contenedorPaquetes');
       cont.innerHTML = '';
 
-      const minVal = parseInt(min, 10) || 1;
-
       const listaOpciones = [
-        { cant: minVal, desc: 0 },
-        { cant: minVal * 2, desc: 0 },
-        { cant: minVal * 3, desc: 0 },
-        { cant: Math.max(minVal * 4, 20), desc: 5 },
-        { cant: Math.max(minVal * 8, 40), desc: 7 },
-        { cant: Math.max(minVal * 15, 100), desc: 10 }
+        { cant: min, desc: 0 },
+        { cant: min + 2, desc: 0 },
+        { cant: min + 4, desc: 0 },
+        { cant: Math.max(10, min + 5), desc: 5 },
+        { cant: Math.max(20, min + 10), desc: 7 },
+        { cant: Math.max(50, min + 25), desc: 10 }
       ];
 
       const opcionesUnicas = [];
       const vista = new Set();
       listaOpciones.forEach(o => {
-        if (!vista.has(o.cant) && o.cant >= minVal) {
+        if (!vista.has(o.cant)) {
           vista.add(o.cant);
           opcionesUnicas.push(o);
         }
       });
 
-      opcionesUnicas.forEach((o) => {
-        o.desc=Math.round(calcularDescuentoPorcentaje(o.cant)*100);
+      opcionesUnicas.forEach(o => {
+        o.desc = Math.round(calcularDescuentoPorcentaje(o.cant) * 100);
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.onclick = function() { seleccionarOpcion(o.cant); };
         btn.setAttribute('data-cant', o.cant);
-        btn.id = 'pack_btn_' + o.cant;
 
         let descHtml = '';
         if (o.desc > 0) {
-          btn.className = 'btn-opcion relative border border-green-500/40 bg-green-950/20 p-2.5 rounded-xl text-center cursor-pointer transition';
+          btn.className = 'btn-opcion relative border border-green-500/40 bg-green-950/20 p-2.5 rounded-xl text-center transition hover:border-green-400';
           descHtml = `<span class="absolute -top-2 -right-1 bg-green-500 text-black text-[9px] px-1.5 font-black rounded-full">${o.desc}% OFF</span>
                       <div class="font-bold text-sm text-green-400">${o.cant} Boletas</div>`;
         } else {
-          btn.className = 'btn-opcion border border-gray-800 bg-gray-950 p-2.5 rounded-xl text-center cursor-pointer transition';
+          btn.className = 'btn-opcion border border-gray-800 bg-gray-950 p-2.5 rounded-xl text-center transition hover:border-yellow-500/50';
           descHtml = `<div class="font-bold text-sm text-white">${o.cant} Boleta${o.cant > 1 ? 's' : ''}</div>`;
         }
 
@@ -460,41 +548,44 @@
 
       const btnCopiar = document.getElementById('btnCopiarCuenta');
       btnCopiar.innerHTML = `<span>📋 Copiar Cuenta</span>`;
-      btnCopiar.className = "bg-yellow-500/20 hover:bg-yellow-500 border border-yellow-500 text-yellow-400 hover:text-black font-bold px-3 py-1 rounded-lg transition text-[11px] flex items-center gap-1 cursor-pointer";
+      btnCopiar.className = "bg-yellow-500/20 hover:bg-yellow-500 border border-yellow-500 text-yellow-400 hover:text-black font-bold px-3 py-1 rounded-lg transition text-[11px] flex items-center gap-1";
     }
 
     function copiarCuentaBancaria() {
       if (!bancoSeleccionado || !BANCOS_INFO[bancoSeleccionado]) return;
+
       const numCuenta = BANCOS_INFO[bancoSeleccionado].cuenta;
 
-      navigator.clipboard.writeText(numCuenta).then(() => {
+      const tempInput = document.createElement("input");
+      tempInput.value = numCuenta;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand('copy');
         const btn = document.getElementById('btnCopiarCuenta');
         btn.innerHTML = `<span>✓ ¡Copiado!</span>`;
-        btn.className = "bg-green-500 text-black font-black px-3 py-1 rounded-lg transition text-[11px] flex items-center gap-1 shadow-md cursor-pointer";
-      }).catch(() => {
-        window.prompt("Copia el número de cuenta:", numCuenta);
-      });
+        btn.className = "bg-green-500 text-black font-black px-3 py-1 rounded-lg transition text-[11px] flex items-center gap-1 shadow-md";
+        mostrarNotificacion("Número de cuenta copiado: " + numCuenta, "success");
+      } catch (err) {
+        mostrarNotificacion("Número de cuenta: " + numCuenta, "info");
+      }
+      document.body.removeChild(tempInput);
     }
 
     function seleccionarOpcion(cant) {
-      const cantidad = parseInt(cant, 10);
-      if (isNaN(cantidad) || cantidad <= 0) return;
-
-      cantidadSeleccionada = cantidad;
-      
-      const inputLibre = document.getElementById('cantLibre');
-      if (inputLibre) {
-        inputLibre.value = cantidad;
-        inputLibre.min = minimoCompraGlobal;
-      }
+      if (compraEnCurso) return;
+      cant = Number(cant);
+      if (!Number.isSafeInteger(cant) || cant < 1) return;
+      cantidadSeleccionada = cant;
+      document.getElementById('cantLibre').value = cant;
 
       document.querySelectorAll('.btn-opcion').forEach(btn => {
-        btn.classList.remove('ring-2', 'ring-yellow-400', 'border-yellow-400', 'bg-yellow-500/10');
+        btn.classList.remove('ring-2', 'ring-yellow-400', 'border-yellow-400');
       });
 
-      const selectedBtn = document.querySelector(`[data-cant="${cantidad}"]`);
+      const selectedBtn = document.querySelector(`[data-cant="${cant}"]`);
       if (selectedBtn) {
-        selectedBtn.classList.add('ring-2', 'ring-yellow-400', 'border-yellow-400', 'bg-yellow-500/10');
+        selectedBtn.classList.add('ring-2', 'ring-yellow-400', 'border-yellow-400');
       }
 
       actualizarCalculos();
@@ -502,21 +593,21 @@
 
     function cambiarCantidadLibre() {
       const input = document.getElementById('cantLibre');
-      let val = parseInt(input.value, 10);
+      let val = Number(input.value);
 
       document.querySelectorAll('.btn-opcion').forEach(btn => {
-        btn.classList.remove('ring-2', 'ring-yellow-400', 'border-yellow-400', 'bg-yellow-500/10');
+        btn.classList.remove('ring-2', 'ring-yellow-400', 'border-yellow-400');
       });
 
-      if (!isNaN(val) && val > 0) {
+      if (Number.isSafeInteger(val) && val > 0) {
         cantidadSeleccionada = val;
       } else {
-        cantidadSeleccionada = minimoCompraGlobal;
+        cantidadSeleccionada = 0;
       }
 
       const fastBtn = document.querySelector(`[data-cant="${cantidadSeleccionada}"]`);
       if (fastBtn) {
-        fastBtn.classList.add('ring-2', 'ring-yellow-400', 'border-yellow-400', 'bg-yellow-500/10');
+        fastBtn.classList.add('ring-2', 'ring-yellow-400', 'border-yellow-400');
       }
 
       actualizarCalculos();
@@ -530,72 +621,65 @@
     }
 
     function actualizarCalculos() {
-      const cant = parseInt(cantidadSeleccionada, 10) || minimoCompraGlobal || 1;
-      let subtotal = cant * PRECIO_BASE;
-      let descPct = calcularDescuentoPorcentaje(cant);
-      totalCalculado = Math.round(cant * Math.round(PRECIO_BASE*100) * (1-descPct))/100;
+      let subtotal = cantidadSeleccionada * PRECIO_BASE;
+      let descPct = calcularDescuentoPorcentaje(cantidadSeleccionada);
+      totalCalculado = Math.round(subtotal * (1 - descPct) * 100) / 100;
 
-      const resumenDesc = document.getElementById('resumenDesc');
-      if (resumenDesc) resumenDesc.innerText = Math.round(descPct * 100) + '%';
-      
-      const resumenTotal = document.getElementById('resumenTotal');
-      if (resumenTotal) resumenTotal.innerText = '$' + totalCalculado.toFixed(2);
+      document.getElementById('resumenDesc').innerText = Math.round(descPct * 100) + '%';
+      document.getElementById('resumenTotal').innerText = '$' + totalCalculado.toFixed(2);
     }
 
-    function buscarBoleto() {
+    async function buscarBoleto() {
       const q = document.getElementById('inputBuscar').value.trim();
       const hojaBusqueda = document.getElementById('selectSorteoVerificador').value;
 
       if (!q) {
-        alert("Por favor ingresa un número de boleto .");
+        mostrarNotificacion("Por favor ingresa un número de boleto o teléfono.", "error");
         return;
       }
 
       const resBox = document.getElementById('resultadoBusqueda');
       resBox.classList.remove('hidden');
-      resBox.innerHTML = '<p class="text-xs text-yellow-400 font-bold text-center animate-pulse">Buscando en Google Sheets...</p>';
+      resBox.innerHTML = '<p class="text-xs text-yellow-400 text-center py-2 animate-pulse">🔍 Consultando tu Google Sheet en vivo...</p>';
 
-      apiCallJSONP('verificarBoleto', { q: q, hoja: hojaBusqueda })
-        .then(res => {
-          if (!res.exito || !res.resultados || res.resultados.length === 0) {
-            resBox.innerHTML = '<p class="text-xs text-red-400 text-center font-bold">No se encontraron boletos asociados.</p>';
-            return;
-          }
+      try {
+        const res = await apiBridge.verificarBoleto(q, hojaBusqueda);
+        if (!res.exito || !res.resultados || res.resultados.length === 0) {
+          resBox.innerHTML = '<p class="text-xs text-red-400 text-center py-2">No se encontraron boletos asociados a la búsqueda.</p>';
+          return;
+        }
 
-          let html = '';
-          res.resultados.forEach(item => {
-            let badgeColor = 'bg-yellow-500/20 text-yellow-400 border-yellow-500';
-            if (item.estado === 'PAGADO') badgeColor = 'bg-green-500/20 text-green-400 border-green-500';
-            if (item.estado === 'DISPONIBLE') badgeColor = 'bg-blue-500/20 text-blue-400 border-blue-500';
+        let html = '';
+        res.resultados.forEach(item => {
+          let badgeColor = 'bg-yellow-500/20 text-yellow-400 border-yellow-500';
+          if (item.estado === 'PAGADO') badgeColor = 'bg-green-500/20 text-green-400 border-green-500';
+          if (item.estado === 'DISPONIBLE') badgeColor = 'bg-blue-500/20 text-blue-400 border-blue-500';
 
-            html += `
-              <div class="flex justify-between items-center border-b border-gray-800 pb-2 pt-1 text-xs font-mono">
-                <div>
-                  <span class="text-white font-bold">Boleto #${item.numero}</span>
-                  <span class="text-gray-500 block text-[10px] font-sans">${escapar(item.comprador)}</span>
-                </div>
-                <span class="border px-2.5 py-0.5 rounded-full font-bold text-[10px] ${badgeColor}">
-                  ${escapar(item.estado)}
-                </span>
+          html += `
+            <div class="flex justify-between items-center border-b border-gray-800 pb-2 pt-1 text-xs font-mono">
+              <div>
+                <span class="text-white font-bold">Boleto #${escaparHTML(item.numero)}</span>
+                <span class="text-gray-500 block text-[10px] font-sans">${escaparHTML(item.comprador)}</span>
               </div>
-            `;
-          });
-          resBox.innerHTML = html;
-        })
-        .catch(err => {
-          resBox.innerHTML = `<p class="text-xs text-red-400 text-center">Error al consultar: ${escapar(err.message)}</p>`;
+              <span class="border px-2.5 py-0.5 rounded-full font-bold text-[10px] ${badgeColor}">
+                ${escaparHTML(item.estado)}
+              </span>
+            </div>
+          `;
         });
+        resBox.innerHTML = html;
+      } catch (e) {
+        resBox.innerHTML = '<p class="text-xs text-red-400 text-center py-2">Error al conectar con Google Sheets.</p>';
+      }
     }
 
     function abrirModalCompra() {
-      if(!infoLista || enviando) { alert("Espera a que cargue el sorteo.");return; }
+      if (!infoSorteoLista) {
+        mostrarNotificacion("Espera a que se carguen el precio y la cantidad mínima reales.", "error");
+        return;
+      }
       document.getElementById('modalCompra').classList.remove('hidden');
       document.getElementById('modalCompra').classList.add('flex');
-      if (!cantidadSeleccionada || cantidadSeleccionada < minimoCompraGlobal) {
-        seleccionarOpcion(minimoCompraGlobal);
-      } else {
-        seleccionarOpcion(cantidadSeleccionada);
-      }
     }
 
     function cerrarModalCompra() {
@@ -603,110 +687,180 @@
       document.getElementById('modalCompra').classList.remove('flex');
     }
 
-    async function enviarFormulario(e) {
+    function enviarFormulario(e) {
       e.preventDefault();
-      if(enviando) return;
-      if(compraPendiente) { await ejecutarCompra(); return; }
-      if(!infoLista) { alert('Espera a que cargue el sorteo.');return; }
-      const form=document.getElementById('compraForm');
-      if(!form.reportValidity()) return;
-      const cantidad=Number(document.getElementById('cantLibre').value);
-      if(!Number.isInteger(cantidad)||cantidad<minimoCompraGlobal||cantidad>1000) {alert('Cantidad inválida.');return;}
-      if(!bancoSeleccionado) {alert('Selecciona un banco.');return;}
-      const file=document.getElementById('voucherFile').files[0];
-      if(!file || !['image/jpeg','image/png','image/webp','application/pdf'].includes(file.type)||file.size>5*1024*1024) {
-        alert('Adjunta JPG, PNG, WEBP o PDF de máximo 5 MB.');return;
+      if (compraEnCurso) return;
+      if (!infoSorteoLista) {
+        mostrarNotificacion("No se puede comprar hasta cargar los datos reales del sorteo.", "error");
+        return;
       }
-      enviando=true; document.getElementById('btnSubmit').disabled=true;
-      try {
-        cantidadSeleccionada=cantidad;actualizarCalculos();
-        const datos={compraId:crypto.randomUUID(),nombreHoja:sorteoActivo,
-          nombre:document.getElementById('nombre').value.trim(),telefono:document.getElementById('telefono').value.trim(),
-          email:document.getElementById('email').value.trim(),banco:bancoSeleccionado,cantidad,totalCalculado,fileName:file.name};
-        datos.fileData=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(Error('No se pudo leer el voucher.'));r.readAsDataURL(file);});
-        compraPendiente=datos;guardarPendiente();
-      } catch(err) {alert(err.message);} finally {enviando=false;document.getElementById('btnSubmit').disabled=false;}
-      if(compraPendiente) await ejecutarCompra();
-    }
-    async function ejecutarCompra() {
-      if(enviando || !compraPendiente) return;
-      enviando=true;
-      const btn=document.getElementById('btnSubmit');btn.disabled=true;btn.textContent='CONFIRMANDO COMPRA…';
-      document.getElementById('avisoPendiente').hidden=false;
-      try {
-        const r=await new Promise((resolve,reject)=>google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).procesarCompra(compraPendiente));
-        if(!r || !r.exito) {
-          if(r && r.reintentarMismoId===false) {compraPendiente=null;guardarPendiente();document.getElementById('avisoPendiente').hidden=true;}
-          throw Error(r && r.mensaje || 'No se pudo confirmar.');
+      if (!document.getElementById('compraForm').reportValidity()) return;
+      const cantidadExacta = Number(document.getElementById('cantLibre').value);
+      if (!Number.isSafeInteger(cantidadExacta) || cantidadExacta < minimoCompraGlobal) {
+        mostrarNotificacion("Selecciona una cantidad entera, mínimo " + minimoCompraGlobal + ".", "error");
+        return;
+      }
+      cantidadSeleccionada = cantidadExacta;
+      actualizarCalculos();
+      const nombre = document.getElementById('nombre').value.trim();
+      const telefono = document.getElementById('telefono').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const fileInput = document.getElementById('voucherFile');
+
+      if (!nombre) {
+        mostrarNotificacion("Por favor ingresa tu Nombre Completo.", "error");
+        document.getElementById('nombre').focus();
+        return;
+      }
+
+      if (!telefono) {
+        mostrarNotificacion("Por favor ingresa tu número de Teléfono / WhatsApp.", "error");
+        document.getElementById('telefono').focus();
+        return;
+      }
+
+      if (!email) {
+        mostrarNotificacion("Por favor ingresa tu Correo Electrónico.", "error");
+        document.getElementById('email').focus();
+        return;
+      }
+
+      if (!bancoSeleccionado) {
+        mostrarNotificacion("Debes seleccionar un banco para transferir.", "error");
+        document.getElementById('msgBancoReq').classList.remove('hidden');
+        return;
+      }
+
+      if (cantidadSeleccionada < minimoCompraGlobal) {
+        mostrarNotificacion("La cantidad mínima es: " + minimoCompraGlobal, "error");
+        return;
+      }
+
+      if (fileInput.files.length === 0) {
+        mostrarNotificacion("Por favor adjunta el comprobante de pago (voucher).", "error");
+        return;
+      }
+
+      // Capturar todos los datos ANTES del FileReader; ningún cambio posterior
+      // puede modificar la cantidad, banco, sorteo o total de esta compra.
+      const datosCompra = {
+        nombreHoja: sorteoActivo, nombre, telefono, email,
+        banco: bancoSeleccionado, cantidad: cantidadExacta, totalCalculado
+      };
+      compraEnCurso = true;
+      bloquearFormulario(true);
+      const btn = document.getElementById('btnSubmit');
+      btn.disabled = true;
+      btn.innerHTML = `<span class="animate-pulse">GUARDANDO EN TU GOOGLE SHEET...</span>`;
+
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+
+      reader.onload = async function(evt) {
+        const payload = Object.assign({}, datosCompra, {
+          fileName: file.name,
+          fileData: evt.target.result
+        });
+        compraEnviada = datosCompra;
+
+        try {
+          const res = await apiBridge.procesarCompra(payload);
+          onSuccess(res);
+        } catch (err) {
+          onFailure(new Error("No se recibió confirmación del servidor. La compra podría haberse guardado; verifica en la hoja antes de enviarla otra vez. " + err.message));
         }
-        if(r.compraId!==compraPendiente.compraId || r.numeros.length!==Number(compraPendiente.cantidad)) throw Error('Respuesta inesperada. Conserva el ID y consulta al administrador.');
-        sorteoActivo=compraPendiente.nombreHoja;
-        document.getElementById('detalleRecibo').textContent='Compra '+r.compraId+' · RD$ '+r.totalPagado.toFixed(2)+' · Correo registrado: '+r.email+' · Voucher recibido. Pago PENDIENTE de revisión.';
-        compraPendiente=null;guardarPendiente();document.getElementById('avisoPendiente').hidden=true;
-        finalizarCompraExitosa(r.numeros);
-      } catch(err) {
-        alert('No se confirmó la compra: '+err.message+(compraPendiente?' Reintenta con el mismo ID; no realices otra transferencia.':' Corrige los datos antes de volver a enviar.'));
-        document.getElementById('idPendiente').textContent=compraPendiente?compraPendiente.compraId:'';
-      } finally {enviando=false;btn.disabled=false;btn.textContent='PROCESAR / REINTENTAR COMPRA';}
+      };
+
+      reader.onerror = function() { onFailure(new Error("No se pudo leer el voucher. No se envió la compra.")); };
+      reader.onabort = function() { onFailure(new Error("Se canceló la lectura del voucher. No se envió la compra.")); };
+      try { reader.readAsDataURL(file); } catch (err) { onFailure(err); }
     }
 
-    function finalizarCompraExitosa(numeros) {
+    function onSuccess(res) {
+      if (!res || typeof res.exito !== 'boolean') {
+        onFailure(new Error("Respuesta inválida. Verifica la compra en la hoja antes de repetirla."));
+        return;
+      }
+      if (res.exito && (!compraEnviada || !Array.isArray(res.numeros) ||
+          res.numeros.length !== compraEnviada.cantidad || Number(res.cantidad) !== compraEnviada.cantidad ||
+          new Set(res.numeros).size !== compraEnviada.cantidad || !res.voucherUrl || res.email !== compraEnviada.email)) {
+        onFailure(new Error("La respuesta no confirma todas las boletas, el voucher y el correo. Verifica la hoja y que publicaste el GS actualizado; no repitas la compra."));
+        return;
+      }
+      compraEnCurso = false;
+      bloquearFormulario(false);
       const btn = document.getElementById('btnSubmit');
       btn.disabled = false;
       btn.innerHTML = `<span>PROCESAR COMPRA</span>`;
 
-      cerrarModalCompra();
+      if (res.exito) {
+        cerrarModalCompra();
 
-      const contNumeros = document.getElementById('listaNumeros');
-      contNumeros.innerHTML = '';
-      
-      ultimosNumerosObtenidos = numeros;
-      
-      if (numeros.length > 0) {
-        numeros.forEach(num => {
+        const contNumeros = document.getElementById('listaNumeros');
+        contNumeros.innerHTML = '';
+        
+        ultimosNumerosObtenidos = res.numeros || [];
+        
+        ultimosNumerosObtenidos.forEach(num => {
           const badge = document.createElement('span');
           badge.className = 'bg-yellow-500 text-black text-lg font-black px-3 py-1 rounded-xl shadow-md';
           badge.innerText = num;
           contNumeros.appendChild(badge);
         });
-      } else {
-        contNumeros.innerHTML = `
-          <div class="text-xs text-yellow-300 font-bold p-2 text-center">
-            Tus boletas han sido asignadas y tu voucher se ha guardado en el sistema. Puedes comprobar tus 4 dígitos en el verificador usando tu teléfono.
-          </div>
-        `;
-      }
 
-      document.getElementById('modalResultado').classList.remove('hidden');
-      document.getElementById('modalResultado').classList.add('flex');
-      
-      document.getElementById('compraForm').reset();
-      bancoSeleccionado = "";
-      document.getElementById('cardInfoBanco').classList.add('hidden');
-      document.querySelectorAll('.btn-banco').forEach(b => b.classList.remove('ring-2', 'ring-yellow-400', 'border-yellow-400'));
-      seleccionarOpcion(minimoCompraGlobal);
+        const btnCopiar = document.getElementById('btnCopiarWsp');
+        btnCopiar.innerHTML = `<span>📋 COPIAR NÚMERO DE BOLETAS</span>`;
+        btnCopiar.className = "w-full bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-xl font-bold transition flex items-center justify-center gap-2 text-sm shadow-md uppercase";
+
+        document.getElementById('modalResultado').classList.remove('hidden');
+        document.getElementById('modalResultado').classList.add('flex');
+        
+        document.getElementById('compraForm').reset();
+        bancoSeleccionado = "";
+        document.getElementById('cardInfoBanco').classList.add('hidden');
+        document.querySelectorAll('.btn-banco').forEach(b => b.classList.remove('ring-2', 'ring-yellow-400', 'border-yellow-400'));
+        seleccionarOpcion(minimoCompraGlobal);
+        mostrarNotificacion(res.advertencia || "¡Compra guardada en tu Google Sheet con éxito!", res.advertencia ? "info" : "success");
+
+        cargarInfoSorteo(sorteoActivo);
+      } else {
+        mostrarNotificacion("Error: " + (res.mensaje || "No se pudo registrar la compra"), "error");
+      }
     }
 
     function copiarNumerosWhatsapp() {
+      if (!ultimosNumerosObtenidos || ultimosNumerosObtenidos.length === 0) return;
+
       let texto = `*Mis Boletos - NG SUEÑA Y GANA (${sorteoActivo})*\n`;
       texto += "(Lotería Nacional Dominicana Noche)\n\n";
-      
-      if (ultimosNumerosObtenidos.length > 0) {
-        ultimosNumerosObtenidos.forEach(num => {
-          texto += `• Boleto #${num}\n`;
-        });
-      } else {
-        texto += `He realizado mi compra con éxito en el sorteo: ${sorteoActivo}.\n`;
-      }
+      ultimosNumerosObtenidos.forEach(num => {
+        texto += `• Boleto #${num}\n`;
+      });
       texto += "\n¡Mucha suerte! 🍀";
 
-      navigator.clipboard.writeText(texto).then(() => {
+      const tempInput = document.createElement("textarea");
+      tempInput.value = texto;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand('copy');
         const btn = document.getElementById('btnCopiarWsp');
         btn.innerHTML = `<span>✓ ¡LISTA DE BOLETAS COPIADA!</span>`;
-        btn.className = "w-full bg-green-500 text-black py-3 rounded-xl font-black transition flex items-center justify-center gap-2 text-sm shadow-md uppercase cursor-pointer";
-      }).catch(() => {
-        window.prompt("Copia tus boletos:", texto);
-      });
+        btn.className = "w-full bg-green-500 text-black py-3 rounded-xl font-black transition flex items-center justify-center gap-2 text-sm shadow-md uppercase";
+        mostrarNotificacion("Boletas copiadas para enviar por WhatsApp", "success");
+      } catch (err) {
+        mostrarNotificacion("Por favor toma una captura de pantalla.", "info");
+      }
+      document.body.removeChild(tempInput);
+    }
+
+    function onFailure(err) {
+      compraEnCurso = false;
+      bloquearFormulario(false);
+      const btn = document.getElementById('btnSubmit');
+      btn.disabled = false;
+      btn.innerHTML = `<span>PROCESAR COMPRA</span>`;
+      mostrarNotificacion("Ocurrió un error: " + err.message, "error");
     }
 
     function cerrarModalResultado() {
