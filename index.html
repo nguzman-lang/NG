@@ -30,10 +30,10 @@
       </p>
     </section>
 
-    <!-- Botones Dinámicos de Pestañas de Sorteo -->
+    <!-- Pestañas dinámicas de sorteo -->
     <nav id="contenedorTabs" class="flex flex-col sm:flex-row justify-center gap-3">
-      <div class="w-full text-center py-2 text-xs text-yellow-400 font-bold animate-pulse">
-        Cargando sorteos desde Google Sheets...
+      <div id="statusCargaSorteos" class="w-full text-center py-2 text-xs text-yellow-400 font-bold animate-pulse">
+        Conectando con Google Sheets...
       </div>
     </nav>
 
@@ -49,8 +49,8 @@
 
       <div class="p-6 md:p-8 space-y-6">
         <div>
-          <h2 id="txtProductoNombre" class="text-2xl md:text-3xl font-black text-white">Cargando Producto...</h2>
-          <p id="txtProductoDesc" class="text-gray-400 text-sm mt-2 leading-relaxed">Conectando con la hoja de cálculo...</p>
+          <h2 id="txtProductoNombre" class="text-2xl md:text-3xl font-black text-white">Cargando Sorteo...</h2>
+          <p id="txtProductoDesc" class="text-gray-400 text-sm mt-2 leading-relaxed">Obteniendo información del sorteo...</p>
         </div>
 
         <div class="bg-gray-950 p-4 rounded-2xl border border-gray-800 space-y-3">
@@ -237,10 +237,10 @@
     </div>
   </div>
 
-  <!-- SCRIPT CONECTOR -->
+  <!-- SCRIPT CONECTOR CLIENTE -->
   <script>
-    // URL de tu Web App desplegada en Google Apps Script
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz4oP0mrepMwFPPkqh22qX9JXIdowQnnbKudSHm_PP_cIA2SPyOATPQtk1lsqBhdk4dEQ/exec";
+    // URL activa de tu Web App desplegada en Google Apps Script
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyKzgwK_OY--TrQp4R-SbkNfw8FklCZVfsEIeUvaLV5lrLwbczBedsSnpKVlmr3sF6l1Q/exec";
 
     const BANCOS_INFO = {
       "Banco Popular": { cuenta: "857506661", tipo: "Cuenta Corriente", cedula: "402-2523002-4", titular: "Nathanael Guzman" },
@@ -258,11 +258,11 @@
     let sorteoActivo = "Sorteo 1";
 
     /**
-     * Llamada anti-CORS mediante JSONP (Inyección dinámica de Script)
+     * Llamada anti-CORS mediante JSONP con Timeout controlado
      */
     function apiCallJSONP(action, params = {}) {
       return new Promise((resolve, reject) => {
-        const callbackName = 'jsonp_cb_' + Math.round(100000 * Math.random());
+        const callbackName = 'jsonp_cb_' + Math.round(1000000 * Math.random());
         params.action = action;
         params.callback = callbackName;
 
@@ -273,16 +273,25 @@
         const script = document.createElement('script');
         script.src = `${SCRIPT_URL}?${query}`;
 
-        window[callbackName] = function(data) {
-          delete window[callbackName];
+        const timeoutId = setTimeout(() => {
+          cleanup();
+          reject(new Error("Tiempo de espera agotado al conectar con Google Sheets."));
+        }, 12000);
+
+        function cleanup() {
+          clearTimeout(timeoutId);
+          if (window[callbackName]) delete window[callbackName];
           if (script.parentNode) script.parentNode.removeChild(script);
+        }
+
+        window[callbackName] = function(data) {
+          cleanup();
           resolve(data);
         };
 
         script.onerror = function() {
-          delete window[callbackName];
-          if (script.parentNode) script.parentNode.removeChild(script);
-          reject(new Error("No se pudo conectar con el servidor de Google Sheets."));
+          cleanup();
+          reject(new Error("No se pudo conectar con el servidor de Google Sheets. Verifica permisos en Apps Script."));
         };
 
         document.body.appendChild(script);
@@ -330,8 +339,12 @@
         .catch(err => {
           console.error(err);
           document.getElementById('contenedorTabs').innerHTML = `
-            <div class="bg-red-500/10 border border-red-500/40 text-red-400 text-xs p-3 rounded-xl text-center w-full">
-              ⚠️ Esperando sincronización de Google Sheets. Asegúrate de haber actualizado el archivo <b>Codigo.gs</b> con "Nueva Versión".
+            <div class="bg-red-500/10 border border-red-500/40 text-red-400 text-xs p-4 rounded-2xl text-center w-full space-y-2">
+              <p class="font-extrabold text-sm">⚠️ Conexión no disponible con Google Apps Script</p>
+              <p class="text-[11px] text-gray-300">En <b>script.google.com</b> ve a <i>Implementar > Gestionar implementaciones</i>, edita y verifica que <b>Quién tiene acceso</b> sea <b>Cualquiera (Anyone)</b> con una <b>Nueva versión</b>.</p>
+              <a href="${SCRIPT_URL}?action=getListaSorteos" target="_blank" class="inline-block bg-yellow-500 text-black font-black text-[11px] px-3 py-1.5 rounded-lg hover:bg-yellow-400 transition mt-1">
+                Probar URL del Script directamente ↗
+              </a>
             </div>
           `;
         });
@@ -359,7 +372,7 @@
       apiCallJSONP('getInfoRifa', { hoja: hoja })
         .then(info => {
           PRECIO_BASE = Number(info.precioBoleta) || 100;
-          minimoCompraGlobal = Number(info.minimoCompra) || 1;
+          minimoCompraGlobal = parseInt(info.minimoCompra, 10) || 1;
 
           document.getElementById('txtProductoNombre').innerText = info.productoNombre || "Gran Sorteo";
           document.getElementById('txtProductoDesc').innerText = info.productoDesc || "¡Participa ahora!";
@@ -375,8 +388,8 @@
           document.getElementById('lblMinimo').innerText = minimoCompraGlobal;
 
           generarPaquetesDinamicos(minimoCompraGlobal);
-          cantidadSeleccionada = minimoCompraGlobal;
-          seleccionarOpcion(cantidadSeleccionada);
+          // Forzar la selección inmediata al mínimo cargado de H10
+          seleccionarOpcion(minimoCompraGlobal);
         })
         .catch(err => console.error("Error al cargar sorteo:", err));
     }
@@ -385,37 +398,40 @@
       const cont = document.getElementById('contenedorPaquetes');
       cont.innerHTML = '';
 
+      const minVal = parseInt(min, 10) || 1;
+
       const listaOpciones = [
-        { cant: min, desc: 0 },
-        { cant: min * 2, desc: 0 },
-        { cant: min * 3, desc: 0 },
-        { cant: Math.max(10, min * 5), desc: 5 },
-        { cant: Math.max(20, min * 10), desc: 7 },
-        { cant: Math.max(50, min * 25), desc: 10 }
+        { cant: minVal, desc: 0 },
+        { cant: minVal * 2, desc: 0 },
+        { cant: minVal * 3, desc: 0 },
+        { cant: Math.max(minVal * 4, 20), desc: 5 },
+        { cant: Math.max(minVal * 8, 40), desc: 7 },
+        { cant: Math.max(minVal * 15, 100), desc: 10 }
       ];
 
       const opcionesUnicas = [];
       const vista = new Set();
       listaOpciones.forEach(o => {
-        if (!vista.has(o.cant)) {
+        if (!vista.has(o.cant) && o.cant >= minVal) {
           vista.add(o.cant);
           opcionesUnicas.push(o);
         }
       });
 
-      opcionesUnicas.forEach(o => {
+      opcionesUnicas.forEach((o, index) => {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.onclick = function() { seleccionarOpcion(o.cant); };
         btn.setAttribute('data-cant', o.cant);
+        btn.id = 'pack_btn_' + o.cant;
 
         let descHtml = '';
         if (o.desc > 0) {
-          btn.className = 'btn-opcion relative border border-green-500/40 bg-green-950/20 p-2.5 rounded-xl text-center cursor-pointer';
+          btn.className = 'btn-opcion relative border border-green-500/40 bg-green-950/20 p-2.5 rounded-xl text-center cursor-pointer transition';
           descHtml = `<span class="absolute -top-2 -right-1 bg-green-500 text-black text-[9px] px-1.5 font-black rounded-full">${o.desc}% OFF</span>
                       <div class="font-bold text-sm text-green-400">${o.cant} Boletas</div>`;
         } else {
-          btn.className = 'btn-opcion border border-gray-800 bg-gray-950 p-2.5 rounded-xl text-center cursor-pointer';
+          btn.className = 'btn-opcion border border-gray-800 bg-gray-950 p-2.5 rounded-xl text-center cursor-pointer transition';
           descHtml = `<div class="font-bold text-sm text-white">${o.cant} Boleta${o.cant > 1 ? 's' : ''}</div>`;
         }
 
@@ -467,16 +483,24 @@
     }
 
     function seleccionarOpcion(cant) {
-      cantidadSeleccionada = cant;
-      document.getElementById('cantLibre').value = cant;
+      const cantidad = parseInt(cant, 10);
+      if (isNaN(cantidad) || cantidad <= 0) return;
+
+      cantidadSeleccionada = cantidad;
+      
+      const inputLibre = document.getElementById('cantLibre');
+      if (inputLibre) {
+        inputLibre.value = cantidad;
+        inputLibre.min = minimoCompraGlobal;
+      }
 
       document.querySelectorAll('.btn-opcion').forEach(btn => {
-        btn.classList.remove('ring-2', 'ring-yellow-400', 'border-yellow-400');
+        btn.classList.remove('ring-2', 'ring-yellow-400', 'border-yellow-400', 'bg-yellow-500/10');
       });
 
-      const selectedBtn = document.querySelector(`[data-cant="${cant}"]`);
+      const selectedBtn = document.querySelector(`[data-cant="${cantidad}"]`);
       if (selectedBtn) {
-        selectedBtn.classList.add('ring-2', 'ring-yellow-400', 'border-yellow-400');
+        selectedBtn.classList.add('ring-2', 'ring-yellow-400', 'border-yellow-400', 'bg-yellow-500/10');
       }
 
       actualizarCalculos();
@@ -484,21 +508,21 @@
 
     function cambiarCantidadLibre() {
       const input = document.getElementById('cantLibre');
-      let val = parseInt(input.value);
+      let val = parseInt(input.value, 10);
 
       document.querySelectorAll('.btn-opcion').forEach(btn => {
-        btn.classList.remove('ring-2', 'ring-yellow-400', 'border-yellow-400');
+        btn.classList.remove('ring-2', 'ring-yellow-400', 'border-yellow-400', 'bg-yellow-500/10');
       });
 
       if (!isNaN(val) && val > 0) {
         cantidadSeleccionada = val;
       } else {
-        cantidadSeleccionada = 0;
+        cantidadSeleccionada = minimoCompraGlobal;
       }
 
       const fastBtn = document.querySelector(`[data-cant="${cantidadSeleccionada}"]`);
       if (fastBtn) {
-        fastBtn.classList.add('ring-2', 'ring-yellow-400', 'border-yellow-400');
+        fastBtn.classList.add('ring-2', 'ring-yellow-400', 'border-yellow-400', 'bg-yellow-500/10');
       }
 
       actualizarCalculos();
@@ -512,12 +536,16 @@
     }
 
     function actualizarCalculos() {
-      let subtotal = cantidadSeleccionada * PRECIO_BASE;
-      let descPct = calcularDescuentoPorcentaje(cantidadSeleccionada);
+      const cant = parseInt(cantidadSeleccionada, 10) || minimoCompraGlobal || 1;
+      let subtotal = cant * PRECIO_BASE;
+      let descPct = calcularDescuentoPorcentaje(cant);
       totalCalculado = subtotal * (1 - descPct);
 
-      document.getElementById('resumenDesc').innerText = Math.round(descPct * 100) + '%';
-      document.getElementById('resumenTotal').innerText = '$' + totalCalculado.toFixed(2);
+      const resumenDesc = document.getElementById('resumenDesc');
+      if (resumenDesc) resumenDesc.innerText = Math.round(descPct * 100) + '%';
+      
+      const resumenTotal = document.getElementById('resumenTotal');
+      if (resumenTotal) resumenTotal.innerText = '$' + totalCalculado.toFixed(2);
     }
 
     function buscarBoleto() {
@@ -536,7 +564,7 @@
       apiCallJSONP('verificarBoleto', { q: q, hoja: hojaBusqueda })
         .then(res => {
           if (!res.exito || !res.resultados || res.resultados.length === 0) {
-            resBox.innerHTML = '<p class="text-xs text-red-400 text-center font-bold">No se encontraron boletos con ese criterio.</p>';
+            resBox.innerHTML = '<p class="text-xs text-red-400 text-center font-bold">No se encontraron boletos asociados.</p>';
             return;
           }
 
@@ -568,6 +596,12 @@
     function abrirModalCompra() {
       document.getElementById('modalCompra').classList.remove('hidden');
       document.getElementById('modalCompra').classList.add('flex');
+      // Asegurarse de que el mínimo de H10 esté seleccionado y calculado
+      if (!cantidadSeleccionada || cantidadSeleccionada < minimoCompraGlobal) {
+        seleccionarOpcion(minimoCompraGlobal);
+      } else {
+        seleccionarOpcion(cantidadSeleccionada);
+      }
     }
 
     function cerrarModalCompra() {
@@ -583,6 +617,10 @@
       const email = document.getElementById('email').value.trim();
       const fileInput = document.getElementById('voucherFile');
 
+      // Leer directamente la cantidad del input o variable validada
+      const inputCantidad = parseInt(document.getElementById('cantLibre').value, 10);
+      const boletasAComprar = (!isNaN(inputCantidad) && inputCantidad > 0) ? inputCantidad : cantidadSeleccionada;
+
       if (!nombre || !telefono || !email) {
         alert("Por favor completa todos tus datos personales.");
         return;
@@ -594,7 +632,7 @@
         return;
       }
 
-      if (cantidadSeleccionada < minimoCompraGlobal) {
+      if (boletasAComprar < minimoCompraGlobal) {
         alert("La cantidad mínima permitida es de " + minimoCompraGlobal + " boleta(s).");
         return;
       }
@@ -606,7 +644,7 @@
 
       const btn = document.getElementById('btnSubmit');
       btn.disabled = true;
-      btn.innerHTML = `<span class="animate-pulse">SUBIENDO COMPROBANTE Y REGISTRANDO...</span>`;
+      btn.innerHTML = `<span class="animate-pulse">ASIGNANDO ${boletasAComprar} BOLETAS Y SUBIENDO VOUCHER...</span>`;
 
       const file = fileInput.files[0];
       const reader = new FileReader();
@@ -618,13 +656,12 @@
           telefono: telefono,
           email: email,
           banco: bancoSeleccionado,
-          cantidad: cantidadSeleccionada,
+          cantidad: boletasAComprar, // Cantidad exacta seleccionada
           totalCalculado: totalCalculado,
           fileName: file.name,
           fileData: evt.target.result
         };
 
-        // Enviar por POST a Google Apps Script
         fetch(SCRIPT_URL, {
           method: 'POST',
           mode: 'no-cors',
@@ -632,18 +669,19 @@
           body: JSON.stringify(payload)
         })
         .then(() => {
-          // Con mode no-cors la respuesta es opaca pero la escritura en Sheets y Drive es exitosa
+          // Consultar las boletas asignadas a este comprador tomando exactamente la cantidad comprada
           setTimeout(() => {
             apiCallJSONP('verificarBoleto', { q: telefono, hoja: sorteoActivo })
               .then(resVerif => {
                 let nums = [];
                 if (resVerif && resVerif.resultados && resVerif.resultados.length > 0) {
-                  nums = resVerif.resultados.map(r => r.numero).slice(-cantidadSeleccionada);
+                  // Tomar exactamente las últimas N boletas compradas
+                  nums = resVerif.resultados.map(r => r.numero).slice(-boletasAComprar);
                 }
                 finalizarCompraExitosa(nums);
               })
               .catch(() => finalizarCompraExitosa([]));
-          }, 2500);
+          }, 3500);
         })
         .catch(err => {
           btn.disabled = false;
